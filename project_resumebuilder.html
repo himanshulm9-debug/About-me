@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Resume Builder - A dual-interface system for managing and showcasing professional profiles.">
+    <title>Resume Builder | Project Case Study</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        bg: '#020617', // Slate 950
+                        accent: '#8b5cf6', // Violet 500
+                        secondary: '#3b82f6', // Blue 500
+                        success: '#10b981', // Emerald 500
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* --- CORE SETTINGS --- */
+        :root { --cursor-size: 20px; }
+        body { background-color: #020617; color: #ffffff; overflow-x: hidden; }
+
+        @media (hover: hover) and (pointer: fine) {
+            body { cursor: none; }
+            #cursor-dot, #cursor-outline { display: block; }
+        }
+        @media (hover: none) {
+            #cursor-dot, #cursor-outline { display: none; }
+        }
+
+        /* --- UI ELEMENTS --- */
+        .noise-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 9998; opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #8b5cf6, #3b82f6);
+            border-radius: 4px;
+        }
+
+        /* --- CURSOR --- */
+        #cursor-dot {
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
+            width: 8px; height: 8px; background-color: white; border-radius: 50%;
+            z-index: 9999; pointer-events: none;
+        }
+        #cursor-outline {
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
+            width: 40px; height: 40px; border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%; z-index: 9999; pointer-events: none;
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        body.hovering #cursor-outline {
+            width: 60px; height: 60px;
+            background-color: rgba(139, 92, 246, 0.1);
+            border-color: transparent; backdrop-filter: blur(2px);
+        }
+
+        /* --- GLASSMORPHISM --- */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glass-nav {
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.4; }
+        
+        .text-gradient-primary {
+            background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 50%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .reveal {
+            opacity: 0; transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body class="antialiased selection:bg-accent selection:text-white">
+
+    <div class="noise-overlay"></div>
+    <div id="cursor-dot"></div>
+    <div id="cursor-outline"></div>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass-nav">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-xl font-display font-bold tracking-tighter hover-trigger flex items-center gap-2 group">
+                <i data-lucide="arrow-left" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i>
+                HIMANSHU<span class="text-accent">.</span>
+            </a>
+            <a href="index.html#contact" class="px-5 py-2 rounded-full border border-gray-700 hover:border-accent hover:bg-accent/10 transition text-sm font-medium hover-trigger">
+                Let's Build Change
+            </a>
+        </div>
+    </nav>
+
+    <!-- Project Hero -->
+    <header class="relative pt-40 pb-20 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-md reveal">
+                <span class="w-2 h-2 rounded-full bg-violet-400 animate-pulse"></span>
+                <span class="text-xs font-medium tracking-wider text-gray-300 uppercase">Career Development Tools</span>
+            </div>
+            
+            <h1 class="font-display text-6xl md:text-8xl font-bold mb-6 reveal tracking-tighter" style="transition-delay: 100ms;">
+                Talent Forge
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-gray-400 max-w-2xl mx-auto leading-relaxed reveal" style="transition-delay: 200ms;">
+                A dual-interface platform bridging administrative control with public presentation. Empowering institutions to manage and showcase top talent through dynamic, data-driven portfolios.
+            </p>
+        </div>
+    </header>
+
+    <!-- Project UI Visualization -->
+    <section class="max-w-6xl mx-auto px-6 mb-32 reveal">
+        <div class="glass-panel rounded-2xl aspect-video w-full overflow-hidden relative group hover-trigger border border-white/10">
+            <!-- Background Glow -->
+            <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-[#1e1b4b] to-[#172554] group-hover:scale-105 transition duration-700"></div>
+            
+            <!-- Abstract UI: Split Screen (Admin Form vs Public Card) -->
+            <div class="absolute inset-0 p-8 flex gap-8">
+                
+                <!-- Left: Admin Panel (Abstract) -->
+                <div class="w-1/3 hidden md:flex flex-col gap-4 bg-[#0f172a]/80 backdrop-blur-md border border-white/10 rounded-xl p-4 transform translate-y-8 group-hover:translate-y-4 transition duration-500">
+                    <div class="flex items-center gap-2 mb-2 border-b border-white/10 pb-2">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-20 h-2 bg-white/10 rounded-full ml-auto"></div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="h-8 bg-white/5 rounded border border-white/5 w-full"></div> <!-- Input -->
+                        <div class="h-8 bg-white/5 rounded border border-white/5 w-2/3"></div> <!-- Input -->
+                        <div class="h-24 bg-white/5 rounded border border-white/5 w-full"></div> <!-- Textarea -->
+                        <div class="flex gap-2">
+                            <div class="h-8 w-8 bg-accent/20 rounded"></div>
+                            <div class="h-8 w-24 bg-accent/20 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Public Showcase (Abstract) -->
+                <div class="flex-1 flex flex-col gap-6 relative z-10">
+                    <!-- Search Bar -->
+                    <div class="h-12 w-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-full flex items-center px-4 justify-between">
+                        <div class="w-32 h-2 bg-white/20 rounded-full"></div>
+                        <div class="w-4 h-4 rounded-full bg-white/20"></div>
+                    </div>
+                    
+                    <!-- Grid of Cards -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Resume Card 1 -->
+                        <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-4 hover:bg-white/10 transition">
+                            <div class="flex gap-3 mb-3">
+                                <div class="w-10 h-10 rounded-full bg-indigo-500/30 border border-indigo-500/50"></div>
+                                <div class="space-y-1">
+                                    <div class="w-24 h-3 bg-white/20 rounded-full"></div>
+                                    <div class="w-16 h-2 bg-white/10 rounded-full"></div>
+                                </div>
+                            </div>
+                            <div class="flex gap-1 mb-2">
+                                <div class="w-8 h-2 bg-yellow-500/50 rounded-full"></div>
+                                <div class="w-8 h-2 bg-yellow-500/50 rounded-full"></div>
+                                <div class="w-8 h-2 bg-yellow-500/20 rounded-full"></div>
+                            </div>
+                            <div class="w-full h-16 bg-black/20 rounded mt-2 border border-white/5"></div>
+                        </div>
+                        
+                        <!-- Resume Card 2 -->
+                        <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-4 hover:bg-white/10 transition translate-y-4">
+                            <div class="flex gap-3 mb-3">
+                                <div class="w-10 h-10 rounded-full bg-purple-500/30 border border-purple-500/50"></div>
+                                <div class="space-y-1">
+                                    <div class="w-20 h-3 bg-white/20 rounded-full"></div>
+                                    <div class="w-12 h-2 bg-white/10 rounded-full"></div>
+                                </div>
+                            </div>
+                            <div class="flex gap-1 mb-2">
+                                <div class="w-8 h-2 bg-yellow-500/50 rounded-full"></div>
+                                <div class="w-8 h-2 bg-yellow-500/50 rounded-full"></div>
+                                <div class="w-8 h-2 bg-yellow-500/50 rounded-full"></div>
+                            </div>
+                            <div class="w-full h-16 bg-black/20 rounded mt-2 border border-white/5"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- The Story -->
+    <section class="max-w-5xl mx-auto px-6 py-20">
+        <div class="grid md:grid-cols-2 gap-16">
+            <div class="reveal">
+                <h2 class="font-display text-3xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="p-2 rounded-lg bg-red-500/10 text-red-400"><i data-lucide="file-warning" class="w-6 h-6"></i></span>
+                    The Problem
+                </h2>
+                <p class="text-gray-400 leading-relaxed text-lg mb-8">
+                    Managing professional profiles for an organization is often chaotic. Resumes come in various formats (PDF, Docx), designs are inconsistent, and data is trapped in static files, making it impossible to search or filter candidates effectively.
+                </p>
+                <p class="text-gray-400 leading-relaxed text-lg">
+                    Updating a single detail requires re-uploading entire documents. There was no centralized way to showcase talent with a unified, professional brand identity.
+                </p>
+            </div>
+            
+            <div class="reveal" style="transition-delay: 200ms;">
+                <h2 class="font-display text-3xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="p-2 rounded-lg bg-green-500/10 text-green-400"><i data-lucide="database" class="w-6 h-6"></i></span>
+                    The Solution
+                </h2>
+                <p class="text-gray-400 leading-relaxed text-lg mb-8">
+                    I built a centralized ecosystem. The <strong>Admin Pane</strong> (restricted access) allows for structured data entry—converting skills, education, and experience into pure JSON. It features a built-in image cropper to ensure uniform profile photos.
+                </p>
+                <p class="text-gray-400 leading-relaxed text-lg">
+                    The <strong>Public Showcase</strong> reads this structured data to generate beautiful, interactive resume cards on the fly. It enables instant filtering by skills or location and includes a one-click "Download PDF" feature generated directly from the live data.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Deep Dive -->
+    <section class="py-20 bg-white/5 border-y border-white/5 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-16 text-center">
+                <h2 class="font-display text-4xl font-bold mb-4 reveal">Under the Hood</h2>
+                <p class="text-gray-400 reveal">A full-stack solution focusing on data integrity and presentation.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Tech Card 1 -->
+                <div class="glass-panel p-8 rounded-xl reveal hover-trigger group">
+                    <div class="mb-6 text-accent"><i data-lucide="server" class="w-10 h-10"></i></div>
+                    <h3 class="text-xl font-bold mb-3">Node.js Backend</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                        A robust Express server manages the JSON database. I implemented a file-based storage system for portability and secure API key authentication to protect the Admin routes from unauthorized access.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs px-2 py-1 bg-white/10 rounded">Express</span>
+                        <span class="text-xs px-2 py-1 bg-white/10 rounded">FS Module</span>
+                    </div>
+                </div>
+
+                <!-- Tech Card 2 -->
+                <div class="glass-panel p-8 rounded-xl reveal hover-trigger group" style="transition-delay: 100ms;">
+                    <div class="mb-6 text-secondary"><i data-lucide="crop" class="w-10 h-10"></i></div>
+                    <h3 class="text-xl font-bold mb-3">Image Processing</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                        Integrated <strong>Cropper.js</strong> in the admin dashboard. This ensures that every profile picture uploaded is perfectly square and optimized before being saved to the server, maintaining visual consistency across the showcase.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs px-2 py-1 bg-white/10 rounded">Cropper.js</span>
+                        <span class="text-xs px-2 py-1 bg-white/10 rounded">Base64</span>
+                    </div>
+                </div>
+
+                <!-- Tech Card 3 -->
+                <div class="glass-panel p-8 rounded-xl reveal hover-trigger group" style="transition-delay: 200ms;">
+                    <div class="mb-6 text-success"><i data-lucide="file-text" class="w-10 h-10"></i></div>
+                    <h3 class="text-xl font-bold mb-3">Dynamic PDF</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                        Used <strong>jsPDF</strong> to generate downloadable resumes client-side. The system takes the JSON data and draws a clean, printable PDF document instantly, removing the need for users to manually format Word documents.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs px-2 py-1 bg-white/10 rounded">jsPDF</span>
+                        <span class="text-xs px-2 py-1 bg-white/10 rounded">Client-Side Gen</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Stats -->
+    <section class="py-32 max-w-5xl mx-auto px-6 text-center">
+        <h2 class="font-display text-3xl font-bold mb-16 reveal">Impact Metrics</h2>
+        
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-12">
+            <div class="reveal">
+                <div class="text-5xl font-bold text-gradient-primary mb-2 font-display">100%</div>
+                <div class="text-sm text-gray-400 uppercase tracking-widest">Format Consistency</div>
+            </div>
+            <div class="reveal" style="transition-delay: 100ms;">
+                <div class="text-5xl font-bold text-white mb-2 font-display">0s</div>
+                <div class="text-sm text-gray-400 uppercase tracking-widest">Search Latency</div>
+            </div>
+            <div class="reveal" style="transition-delay: 200ms;">
+                <div class="text-5xl font-bold text-white mb-2 font-display">2</div>
+                <div class="text-sm text-gray-400 uppercase tracking-widest">Distinct Interfaces</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation Footer -->
+    <section class="py-20 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <a href="index.html" class="text-gray-400 hover:text-white transition flex items-center gap-2 hover-trigger">
+                <i data-lucide="arrow-left"></i> Back to Home
+            </a>
+            <a href="project_wavault.html" class="text-white hover:text-accent transition flex items-center gap-2 hover-trigger text-lg font-bold">
+                Next Project: WhatsApp Vault <i data-lucide="arrow-right"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/5 relative z-10 text-sm text-gray-500 bg-black/20">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p>&copy; 2026 Himanshu. Coding for a better world.</p>
+            <div class="flex gap-6">
+                <a href="https://github.com/himanshulm9-debug" target="_blank" rel="noopener noreferrer" class="hover:text-white transition hover-trigger flex items-center gap-2">
+                    <i data-lucide="github" class="w-4 h-4"></i> GitHub
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+
+            // Reveal Animation
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('active');
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+            // Cursor Logic
+            if (window.matchMedia("(hover: hover)").matches) {
+                const dot = document.getElementById("cursor-dot");
+                const outline = document.getElementById("cursor-outline");
+                let mx = window.innerWidth/2, my = window.innerHeight/2;
+                let ox = mx, oy = my;
+
+                document.addEventListener("mousemove", e => { mx = e.clientX; my = e.clientY; dot.style.left = `${mx}px`; dot.style.top = `${my}px`; });
+                
+                const animate = () => {
+                    ox += (mx - ox) * 0.15; oy += (my - oy) * 0.15;
+                    outline.style.left = `${ox}px`; outline.style.top = `${oy}px`;
+                    requestAnimationFrame(animate);
+                };
+                animate();
+
+                document.querySelectorAll('.hover-trigger').forEach(el => {
+                    el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+                    el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+                });
+            }
+
+            // Three.js Background
+            const canvas = document.getElementById('bg-canvas');
+            if (canvas) {
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+                camera.position.z = 30;
+                const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+
+                const geometry = new THREE.BufferGeometry();
+                const count = 1200;
+                const pos = new Float32Array(count * 3);
+                for(let i=0; i<count*3; i++) pos[i] = (Math.random()-0.5) * 100;
+                geometry.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+                const material = new THREE.PointsMaterial({ size: 0.4, color: 0x8b5cf6, transparent: true, opacity: 0.4 });
+                const points = new THREE.Points(geometry, material);
+                scene.add(points);
+
+                function animate3D() {
+                    points.rotation.y += 0.001;
+                    points.rotation.x += 0.0005;
+                    renderer.render(scene, camera);
+                    requestAnimationFrame(animate3D);
+                }
+                animate3D();
+
+                window.addEventListener('resize', () => {
+                    camera.aspect = window.innerWidth/window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

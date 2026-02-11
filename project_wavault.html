@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="WhatsApp Vault - A real-time, socket-based archival engine using Baileys and MongoDB.">
+    <title>WhatsApp Vault | Project Case Study</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        bg: '#020617', // Slate 950
+                        accent: '#22c55e', // Green 500 (WhatsApp Brand feel)
+                        secondary: '#0ea5e9', // Sky 500 (Telegram Brand feel)
+                        success: '#10b981', 
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* --- CORE SETTINGS --- */
+        :root { --cursor-size: 20px; }
+        body { background-color: #020617; color: #ffffff; overflow-x: hidden; }
+
+        @media (hover: hover) and (pointer: fine) {
+            body { cursor: none; }
+            #cursor-dot, #cursor-outline { display: block; }
+        }
+        @media (hover: none) {
+            #cursor-dot, #cursor-outline { display: none; }
+        }
+
+        /* --- UI ELEMENTS --- */
+        .noise-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 9998; opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #22c55e, #0ea5e9);
+            border-radius: 4px;
+        }
+
+        /* --- CURSOR --- */
+        #cursor-dot {
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
+            width: 8px; height: 8px; background-color: white; border-radius: 50%;
+            z-index: 9999; pointer-events: none;
+        }
+        #cursor-outline {
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
+            width: 40px; height: 40px; border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%; z-index: 9999; pointer-events: none;
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        body.hovering #cursor-outline {
+            width: 60px; height: 60px;
+            background-color: rgba(34, 197, 94, 0.1);
+            border-color: transparent; backdrop-filter: blur(2px);
+        }
+
+        /* --- GLASSMORPHISM --- */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glass-nav {
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.4; }
+        
+        .text-gradient-primary {
+            background: linear-gradient(135deg, #22c55e 0%, #0ea5e9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .reveal {
+            opacity: 0; transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body class="antialiased selection:bg-accent selection:text-white">
+
+    <div class="noise-overlay"></div>
+    <div id="cursor-dot"></div>
+    <div id="cursor-outline"></div>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass-nav">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-xl font-display font-bold tracking-tighter hover-trigger flex items-center gap-2 group">
+                <i data-lucide="arrow-left" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i>
+                HIMANSHU<span class="text-accent">.</span>
+            </a>
+            <a href="index.html#contact" class="px-5 py-2 rounded-full border border-gray-700 hover:border-accent hover:bg-accent/10 transition text-sm font-medium hover-trigger">
+                Let's Build Change
+            </a>
+        </div>
+    </nav>
+
+    <!-- Project Hero -->
+    <header class="relative pt-40 pb-20 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-md reveal">
+                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                <span class="text-xs font-medium tracking-wider text-gray-300 uppercase">Data Sovereignty</span>
+            </div>
+            
+            <h1 class="font-display text-6xl md:text-8xl font-bold mb-6 reveal tracking-tighter" style="transition-delay: 100ms;">
+                WhatsApp Vault
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-gray-400 max-w-2xl mx-auto leading-relaxed reveal" style="transition-delay: 200ms;">
+                "Set it and forget it." A headless backup engine that intercepts chat streams via WebSockets, archiving text to MongoDB and media to Telegram Cloud in real-time.
+            </p>
+        </div>
+    </header>
+
+    <!-- Project UI Visualization -->
+    <section class="max-w-6xl mx-auto px-6 mb-32 reveal">
+        <div class="glass-panel rounded-2xl aspect-video w-full overflow-hidden relative group hover-trigger border border-white/10">
+            <!-- Background Glow -->
+            <div class="absolute inset-0 bg-gradient-to-br from-[#0b141a] via-[#111b21] to-[#0c4a6e] group-hover:scale-105 transition duration-700"></div>
+            
+            <!-- Abstract UI: Chat Interface -->
+            <div class="absolute inset-0 p-8 flex flex-col md:flex-row gap-0">
+                
+                <!-- Left Sidebar (Chat List) -->
+                <div class="w-full md:w-1/3 bg-[#111b21] border-r border-white/5 flex flex-col hidden md:flex">
+                    <div class="h-16 border-b border-white/5 flex items-center px-4 gap-3">
+                        <div class="w-10 h-10 rounded-full bg-white/10"></div>
+                        <div class="flex-1 space-y-2">
+                            <div class="h-2 w-20 bg-white/20 rounded"></div>
+                        </div>
+                    </div>
+                    <div class="flex-1 p-2 space-y-1">
+                        <!-- Chat Item 1 (Active) -->
+                        <div class="h-16 bg-[#2a3942] rounded-lg flex items-center px-3 gap-3">
+                            <div class="w-10 h-10 rounded-full bg-white/10"></div>
+                            <div class="flex-1">
+                                <div class="h-2 w-24 bg-white/30 rounded mb-2"></div>
+                                <div class="h-2 w-32 bg-white/10 rounded"></div>
+                            </div>
+                        </div>
+                        <!-- Chat Item 2 -->
+                        <div class="h-16 hover:bg-[#202c33] rounded-lg flex items-center px-3 gap-3">
+                            <div class="w-10 h-10 rounded-full bg-white/5"></div>
+                            <div class="flex-1">
+                                <div class="h-2 w-20 bg-white/20 rounded mb-2"></div>
+                                <div class="h-2 w-28 bg-white/5 rounded"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Content (Message View) -->
+                <div class="flex-1 bg-[#0b141a] flex flex-col relative overflow-hidden">
+                    <div class="absolute inset-0 opacity-[0.05]" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
+                    
+                    <!-- Header -->
+                    <div class="h-16 bg-[#202c33] border-b border-white/5 flex items-center px-6 gap-4 z-10">
+                        <div class="w-10 h-10 rounded-full bg-white/10"></div>
+                        <div class="h-3 w-32 bg-white/20 rounded"></div>
+                    </div>
+
+                    <!-- Messages -->
+                    <div class="flex-1 p-6 space-y-4 z-10 flex flex-col justify-end pb-12">
+                        <!-- Received Message -->
+                        <div class="self-start bg-[#202c33] p-4 rounded-lg rounded-tl-none max-w-[60%] border border-white/5">
+                            <div class="h-2 w-full bg-white/10 rounded mb-2"></div>
+                            <div class="h-2 w-2/3 bg-white/10 rounded"></div>
+                        </div>
+
+                        <!-- Sent Message -->
+                        <div class="self-end bg-[#005c4b] p-4 rounded-lg rounded-tr-none max-w-[60%] text-white">
+                            <div class="h-2 w-full bg-white/20 rounded mb-2"></div>
+                            <div class="h-2 w-3/4 bg-white/20 rounded"></div>
+                        </div>
+
+                        <!-- Deleted Message (Resurrected) -->
+                        <div class="self-start bg-red-900/20 border border-red-500/30 p-4 rounded-lg rounded-tl-none max-w-[60%] relative group">
+                            <div class="absolute -top-3 left-0 bg-red-500/20 text-red-400 text-[10px] px-2 py-0.5 rounded border border-red-500/30">DELETED MESSAGE RECOVERED</div>
+                            <div class="h-2 w-full bg-red-200/10 rounded mb-2"></div>
+                            <div class="h-2 w-1/2 bg-red-200/10 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- The Story -->
+    <section class="max-w-5xl mx-auto px-6 py-20">
+        <div class="grid md:grid-cols-2 gap-16">
+            <div class="reveal">
+                <h2 class="font-display text-3xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="p-2 rounded-lg bg-red-500/10 text-red-400"><i data-lucide="cloud-off" class="w-6 h-6"></i></span>
+                    The Problem
+                </h2>
+                <p class="text-gray-400 leading-relaxed text-lg mb-8">
+                    Standard cloud backups (Google Drive/iCloud) are periodic and monolithic. If you lose your phone between backups, that data is gone. More importantly, they respect the "Delete for Everyone" protocol.
+                </p>
+                <p class="text-gray-400 leading-relaxed text-lg">
+                    If someone sends a crucial message and deletes it 5 minutes later, it disappears from your device forever. I needed a system that prioritized **record-keeping over protocol compliance**.
+                </p>
+            </div>
+            
+            <div class="reveal" style="transition-delay: 200ms;">
+                <h2 class="font-display text-3xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="p-2 rounded-lg bg-green-500/10 text-green-400"><i data-lucide="database-backup" class="w-6 h-6"></i></span>
+                    The Solution
+                </h2>
+                <p class="text-gray-400 leading-relaxed text-lg mb-8">
+                    I engineered a "headless client" using the **Baileys** library. It acts as a ghost device linked to your WhatsApp account. It listens to the WebSocket stream 24/7 on a secure server.
+                </p>
+                <p class="text-gray-400 leading-relaxed text-lg">
+                    Every incoming text is instantly indexed in MongoDB. Every image or video (up to 45MB) is tunneled to a private Telegram channel for infinite, free cloud storage. It requires zero interaction after the initial QR scan.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Deep Dive -->
+    <section class="py-20 bg-white/5 border-y border-white/5 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-16 text-center">
+                <h2 class="font-display text-4xl font-bold mb-4 reveal">Under the Hood</h2>
+                <p class="text-gray-400 reveal">Socket interception and dual-cloud storage architecture.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Tech Card 1 -->
+                <div class="glass-panel p-8 rounded-xl reveal hover-trigger group">
+                    <div class="mb-6 text-accent"><i data-lucide="zap" class="w-10 h-10"></i></div>
+                    <h3 class="text-xl font-bold mb-3">Baileys Socket</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                        A reverse-engineered WebSocket client that emulates a WhatsApp Web session. It maintains a persistent connection without a browser, using minimal RAM (runs on Alpine Linux).
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs px-2 py-1 bg-white/10 rounded">Node.js</span>
+                        <span class="text-xs px-2 py-1 bg-white/10 rounded">WebSockets</span>
+                    </div>
+                </div>
+
+                <!-- Tech Card 2 -->
+                <div class="glass-panel p-8 rounded-xl reveal hover-trigger group" style="transition-delay: 100ms;">
+                    <div class="mb-6 text-secondary"><i data-lucide="send" class="w-10 h-10"></i></div>
+                    <h3 class="text-xl font-bold mb-3">Telegram Tunneling</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                        Storing media in a database is expensive. I utilize Telegram's generous Bot API to offload media storage. The app pipes data streams directly from WhatsApp to Telegram without saving files locally.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs px-2 py-1 bg-white/10 rounded">Bot API</span>
+                        <span class="text-xs px-2 py-1 bg-white/10 rounded">Stream Pipes</span>
+                    </div>
+                </div>
+
+                <!-- Tech Card 3 -->
+                <div class="glass-panel p-8 rounded-xl reveal hover-trigger group" style="transition-delay: 200ms;">
+                    <div class="mb-6 text-success"><i data-lucide="layout-grid" class="w-10 h-10"></i></div>
+                    <h3 class="text-xl font-bold mb-3">Next.js Dashboard</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                        A custom frontend that mimics the familiar chat interface but adds "superpowers" like viewing deleted messages and advanced full-text search across years of history.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs px-2 py-1 bg-white/10 rounded">React</span>
+                        <span class="text-xs px-2 py-1 bg-white/10 rounded">SWR</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Stats -->
+    <section class="py-32 max-w-5xl mx-auto px-6 text-center">
+        <h2 class="font-display text-3xl font-bold mb-16 reveal">Performance Metrics</h2>
+        
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-12">
+            <div class="reveal">
+                <div class="text-5xl font-bold text-gradient-primary mb-2 font-display">0ms</div>
+                <div class="text-sm text-gray-400 uppercase tracking-widest">Data Loss</div>
+            </div>
+            <div class="reveal" style="transition-delay: 100ms;">
+                <div class="text-5xl font-bold text-white mb-2 font-display">45MB</div>
+                <div class="text-sm text-gray-400 uppercase tracking-widest">Media Limit</div>
+            </div>
+            <div class="reveal" style="transition-delay: 200ms;">
+                <div class="text-5xl font-bold text-white mb-2 font-display">24/7</div>
+                <div class="text-sm text-gray-400 uppercase tracking-widest">Uptime</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation Footer -->
+    <section class="py-20 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <a href="index.html" class="text-gray-400 hover:text-white transition flex items-center gap-2 hover-trigger">
+                <i data-lucide="arrow-left"></i> Back to Home
+            </a>
+            <a href="project_cryptopro.html" class="text-white hover:text-accent transition flex items-center gap-2 hover-trigger text-lg font-bold">
+                Next Project: CryptoPro <i data-lucide="arrow-right"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/5 relative z-10 text-sm text-gray-500 bg-black/20">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p>&copy; 2026 Himanshu. Coding for a better world.</p>
+            <div class="flex gap-6">
+                <a href="https://github.com/himanshulm9-debug" target="_blank" rel="noopener noreferrer" class="hover:text-white transition hover-trigger flex items-center gap-2">
+                    <i data-lucide="github" class="w-4 h-4"></i> GitHub
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+
+            // Reveal Animation
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('active');
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+            // Cursor Logic
+            if (window.matchMedia("(hover: hover)").matches) {
+                const dot = document.getElementById("cursor-dot");
+                const outline = document.getElementById("cursor-outline");
+                let mx = window.innerWidth/2, my = window.innerHeight/2;
+                let ox = mx, oy = my;
+
+                document.addEventListener("mousemove", e => { mx = e.clientX; my = e.clientY; dot.style.left = `${mx}px`; dot.style.top = `${my}px`; });
+                
+                const animate = () => {
+                    ox += (mx - ox) * 0.15; oy += (my - oy) * 0.15;
+                    outline.style.left = `${ox}px`; outline.style.top = `${oy}px`;
+                    requestAnimationFrame(animate);
+                };
+                animate();
+
+                document.querySelectorAll('.hover-trigger').forEach(el => {
+                    el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+                    el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+                });
+            }
+
+            // Three.js Background
+            const canvas = document.getElementById('bg-canvas');
+            if (canvas) {
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+                camera.position.z = 30;
+                const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+
+                const geometry = new THREE.BufferGeometry();
+                const count = 1200;
+                const pos = new Float32Array(count * 3);
+                for(let i=0; i<count*3; i++) pos[i] = (Math.random()-0.5) * 100;
+                geometry.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+                // Green particles for this theme
+                const material = new THREE.PointsMaterial({ size: 0.4, color: 0x22c55e, transparent: true, opacity: 0.4 });
+                const points = new THREE.Points(geometry, material);
+                scene.add(points);
+
+                function animate3D() {
+                    points.rotation.y += 0.001;
+                    points.rotation.z += 0.0005;
+                    renderer.render(scene, camera);
+                    requestAnimationFrame(animate3D);
+                }
+                animate3D();
+
+                window.addEventListener('resize', () => {
+                    camera.aspect = window.innerWidth/window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

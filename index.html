@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Himanshu - Coding Expert. Creating digital tools that help people and make the world a better place.">
+    <title>Himanshu | Digital Architect</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        bg: '#020617', // Slate 950
+                        accent: '#6366f1', // Indigo 500
+                        secondary: '#a855f7', // Purple 500
+                    },
+                    animation: {
+                        'blob': 'blob 10s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* --- CORE SETTINGS --- */
+        :root {
+            --cursor-size: 20px;
+            --cursor-hover-size: 60px;
+        }
+
+        body {
+            background-color: #020617;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Hide cursor only on devices that have a mouse */
+        @media (hover: hover) and (pointer: fine) {
+            body { cursor: none; }
+            #cursor-dot, #cursor-outline { display: block; }
+        }
+        
+        /* Hide custom cursor on touch devices */
+        @media (hover: none) {
+            #cursor-dot, #cursor-outline { display: none; }
+        }
+
+        /* --- UI ELEMENTS --- */
+        
+        /* Preloader */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background: #020617;
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease-out, visibility 0.5s;
+        }
+
+        /* Noise Texture for "Film Grain" feel */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #6366f1, #a855f7);
+            border-radius: 4px;
+        }
+
+        /* --- CURSOR --- */
+        #cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            width: 8px; height: 8px;
+            background-color: white;
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        #cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            width: 40px; height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+            transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s;
+        }
+        body.hovering #cursor-outline {
+            width: 60px; height: 60px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: transparent;
+            backdrop-filter: blur(2px);
+        }
+
+        /* --- GLASSMORPHISM --- */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .glass-nav {
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* --- SPOTLIGHT CARDS --- */
+        .spotlight-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        /* Gradient Border Follower */
+        .spotlight-card::before {
+            content: "";
+            position: absolute;
+            height: 100%; width: 100%;
+            top: 0; left: 0;
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%);
+            z-index: 1; opacity: 0; transition: opacity 0.5s; pointer-events: none;
+        }
+        /* Border Highlight */
+        .spotlight-card::after {
+            content: "";
+            position: absolute;
+            height: 100%; width: 100%;
+            top: 0; left: 0;
+            background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(168, 85, 247, 0.4), transparent 40%);
+            z-index: 3; opacity: 0; transition: opacity 0.5s; pointer-events: none;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            padding: 1px;
+        }
+        .spotlight-card:hover::before, .spotlight-card:hover::after { opacity: 1; }
+        .spotlight-content { position: relative; z-index: 2; height: 100%; background: rgba(2, 6, 23, 0.6); }
+
+        /* --- UTILS --- */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            opacity: 0.6;
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .text-gradient-primary {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Mobile Menu Animation */
+        #mobile-menu { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        #mobile-menu.closed { transform: translateX(100%); }
+        #mobile-menu.open { transform: translateX(0); }
+    </style>
+</head>
+<body class="antialiased selection:bg-accent selection:text-white">
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="flex flex-col items-center gap-4">
+            <div class="w-12 h-12 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin"></div>
+            <span class="text-sm font-mono text-gray-400 tracking-widest">INITIALIZING...</span>
+        </div>
+    </div>
+
+    <!-- Noise Texture -->
+    <div class="noise-overlay"></div>
+
+    <!-- Custom Cursor -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-outline"></div>
+
+    <!-- 3D Canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass-nav transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-display font-bold tracking-tighter hover-trigger flex items-center gap-2">
+                HIMANSHU<span class="text-accent text-3xl">.</span>
+            </a>
+            
+            <!-- Desktop Links -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#about" class="text-sm font-medium text-gray-300 hover:text-white transition hover-trigger relative group">
+                    My Mission
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all group-hover:w-full"></span>
+                </a>
+                <a href="#work" class="text-sm font-medium text-gray-300 hover:text-white transition hover-trigger relative group">
+                    Impact Projects
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all group-hover:w-full"></span>
+                </a>
+                <a href="#values" class="text-sm font-medium text-gray-300 hover:text-white transition hover-trigger relative group">
+                    Values
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all group-hover:w-full"></span>
+                </a>
+                <a href="#contact" class="px-5 py-2 rounded-full border border-gray-700 hover:border-accent hover:bg-accent/10 transition text-sm font-medium hover-trigger">
+                    Let's Connect
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="menu-btn" class="md:hidden text-white hover-trigger p-2">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-bg/95 backdrop-blur-xl z-40 flex flex-col justify-center items-center gap-8 closed md:hidden">
+        <button id="close-menu-btn" class="absolute top-6 right-6 text-white p-2">
+            <i data-lucide="x" class="w-8 h-8"></i>
+        </button>
+        <a href="#about" class="text-2xl font-display font-bold hover:text-accent transition mobile-link">Mission</a>
+        <a href="#work" class="text-2xl font-display font-bold hover:text-accent transition mobile-link">Impact Projects</a>
+        <a href="#values" class="text-2xl font-display font-bold hover:text-accent transition mobile-link">Values</a>
+        <a href="#contact" class="text-2xl font-display font-bold hover:text-accent transition mobile-link">Contact</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center px-6 pt-20" id="about">
+        <!-- CSS Blobs for depth behind glass -->
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full mix-blend-screen filter blur-[100px] animate-blob pointer-events-none"></div>
+        <div class="absolute top-1/3 right-1/4 w-96 h-96 bg-indigo-600/20 rounded-full mix-blend-screen filter blur-[100px] animate-blob animation-delay-2000 pointer-events-none"></div>
+
+        <div class="relative z-10 text-center max-w-5xl mx-auto">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-md reveal">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                <span class="text-xs font-medium tracking-wider text-gray-300 uppercase">Technology for Humanity</span>
+            </div>
+
+            <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[1.1] mb-8 reveal" style="transition-delay: 100ms;">
+                Crafting Code That <br>
+                <span class="text-gradient-primary">Heals & Empowers</span>
+            </h1>
+
+            <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed reveal" style="transition-delay: 200ms;">
+                I believe in the power of small, thoughtful tools. My goal is to build digital experiences that solve real human problems, foster connection, and make the world a little brighter, one line of code at a time.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 reveal" style="transition-delay: 300ms;">
+                <a href="#work" class="px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-gray-200 transition transform hover:scale-105 hover-trigger w-full sm:w-auto">
+                    See My Impact
+                </a>
+                <a href="#contact" class="px-8 py-4 glass-panel rounded-full hover:bg-white/10 transition transform hover:scale-105 hover-trigger w-full sm:w-auto">
+                    Share Your Idea
+                </a>
+            </div>
+        </div>
+
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-float pointer-events-none">
+            <span class="text-[10px] uppercase tracking-[0.2em]">Scroll</span>
+            <i data-lucide="arrow-down" class="w-4 h-4"></i>
+        </div>
+    </section>
+
+    <!-- Values Section (Grid) -->
+    <section id="values" class="py-32 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-20">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6 reveal">My Core Values</h2>
+                <div class="h-1 w-20 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full reveal"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="cards-container">
+                <!-- Card 1 -->
+                <div class="spotlight-card rounded-2xl reveal group hover-trigger">
+                    <div class="spotlight-content p-8 flex flex-col h-full">
+                        <div class="w-12 h-12 rounded-lg bg-indigo-500/20 flex items-center justify-center mb-6 text-indigo-400 group-hover:scale-110 transition-transform">
+                            <i data-lucide="heart" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-display text-2xl font-bold mb-3">Human-Centric</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                            Technology should serve people, not the other way around. I prioritize accessibility, empathy, and intuitive experiences that respect user well-being.
+                        </p>
+                        <div class="flex gap-2 mt-auto flex-wrap">
+                            <span class="text-[10px] px-2 py-1 bg-white/5 rounded border border-white/5">Accessibility</span>
+                            <span class="text-[10px] px-2 py-1 bg-white/5 rounded border border-white/5">Empathy</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="spotlight-card rounded-2xl reveal group hover-trigger" style="transition-delay: 100ms;">
+                    <div class="spotlight-content p-8 flex flex-col h-full">
+                        <div class="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center mb-6 text-purple-400 group-hover:scale-110 transition-transform">
+                            <i data-lucide="users" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-display text-2xl font-bold mb-3">Community First</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                            Building tools that strengthen local communities and help individuals connect with the resources they need to thrive, safely and efficiently.
+                        </p>
+                        <div class="flex gap-2 mt-auto flex-wrap">
+                            <span class="text-[10px] px-2 py-1 bg-white/5 rounded border border-white/5">Connection</span>
+                            <span class="text-[10px] px-2 py-1 bg-white/5 rounded border border-white/5">Support</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="spotlight-card rounded-2xl reveal group hover-trigger" style="transition-delay: 200ms;">
+                    <div class="spotlight-content p-8 flex flex-col h-full">
+                        <div class="w-12 h-12 rounded-lg bg-pink-500/20 flex items-center justify-center mb-6 text-pink-400 group-hover:scale-110 transition-transform">
+                            <i data-lucide="shield" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-display text-2xl font-bold mb-3">Ethical Privacy</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                            Privacy is a human right. I build secure, transparent systems that protect user data and foster digital trust. You are not a product.
+                        </p>
+                        <div class="flex gap-2 mt-auto flex-wrap">
+                            <span class="text-[10px] px-2 py-1 bg-white/5 rounded border border-white/5">Trust</span>
+                            <span class="text-[10px] px-2 py-1 bg-white/5 rounded border border-white/5">Security</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Work Section -->
+    <section id="work" class="py-32 bg-gradient-to-b from-transparent to-black/50 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+                <div>
+                    <h2 class="font-display text-4xl md:text-5xl font-bold mb-4 reveal">Projects for People</h2>
+                    <p class="text-gray-400 reveal">Small tools designed to make a big difference in daily life.</p>
+                </div>
+                <a href="#" class="text-white border-b border-white pb-1 hover:text-accent hover:border-accent transition reveal hover-trigger">View All Projects</a>
+            </div>
+
+            <div class="space-y-32">
+
+                <!-- Project 1: CryptoPro (Image Left) -->
+                <div class="group relative grid md:grid-cols-2 gap-12 items-center reveal">
+                    <a href="project_cryptopro.html" class="block relative overflow-hidden rounded-2xl aspect-[4/3] bg-gray-900 border border-white/10 hover-trigger cursor-none group-hover:border-white/20 transition-all">
+                        <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-sky-900 to-indigo-900 transition-transform duration-700 group-hover:scale-110"></div>
+                        <!-- Mock UI Element -->
+                        <div class="absolute inset-0 flex items-center justify-center">
+                             <div class="w-3/4 h-3/4 bg-black/40 backdrop-blur border border-white/10 rounded-xl p-4 flex flex-col gap-3 shadow-2xl transform group-hover:-translate-y-2 transition duration-500">
+                                <div class="flex justify-between items-center mb-2">
+                                    <div class="w-20 h-3 bg-white/20 rounded-full"></div>
+                                    <div class="w-8 h-8 rounded-full bg-accent/20"></div>
+                                </div>
+                                <div class="flex-1 bg-white/5 rounded-lg relative overflow-hidden">
+                                     <!-- Chart Line -->
+                                     <svg class="absolute bottom-0 left-0 w-full h-1/2" fill="none" stroke="#38bdf8" stroke-width="2">
+                                        <path d="M0,80 Q50,60 100,70 T200,40" />
+                                    </svg>
+                                </div>
+                             </div>
+                        </div>
+                         <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500 bg-black/60 backdrop-blur-[2px]">
+                            <span class="px-6 py-3 bg-white text-black rounded-full font-bold transform translate-y-4 group-hover:translate-y-0 transition">Read Case Study</span>
+                        </div>
+                    </a>
+                    <div class="order-first md:order-last">
+                        <span class="text-accent font-mono text-sm mb-4 block">01 / FINANCIAL LITERACY</span>
+                        <h3 class="text-3xl font-bold mb-6">CryptoPro</h3>
+                        <p class="text-gray-400 leading-relaxed mb-8">
+                            A real-time financial dashboard designed to democratize market data. By stripping away complexity and providing instant, visual feedback, it empowers everyday users to understand the global economy without the barrier of expensive institutional tools.
+                        </p>
+                        <ul class="flex flex-wrap gap-3">
+                            <li class="px-3 py-1 rounded-full border border-white/10 text-xs text-gray-300">React</li>
+                            <li class="px-3 py-1 rounded-full border border-white/10 text-xs text-gray-300">WebSockets</li>
+                            <li class="px-3 py-1 rounded-full border border-white/10 text-xs text-gray-300">Recharts</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Project 2: Resume Builder (Image Right) -->
+                <div class="group relative grid md:grid-cols-2 gap-12 items-center reveal">
+                    <div class="order-last md:order-first">
+                        <span class="text-accent font-mono text-sm mb-4 block">02 / CAREER TECH</span>
+                        <h3 class="text-3xl font-bold mb-6">Talent Forge</h3>
+                        <p class="text-gray-400 leading-relaxed mb-8">
+                            A dual-interface resume builder and showcase platform. It features an admin-only creation suite for structuring professional data and a public-facing gallery for recruiters to filter and discover top talent.
+                        </p>
+                        <ul class="flex flex-wrap gap-3">
+                            <li class="px-3 py-1 rounded-full border border-white/10 text-xs text-gray-300">Node.js</li>
+                            <li class="px-3 py-1 rounded-full border border-white/10 text-xs text-gray-300">Express</li>
+                            <li class="px-3 py-1 rounded-full border border-white/10 text-xs text-gray-300">Cropper.js</li>
+                        </ul>
+                    </div>
+                     <a href="project_resumebuilder.html" class="block relative overflow-hidden rounded-2xl aspect-[4/3] bg-gray-900 border border-white/10 hover-trigger cursor-none group-hover:border-white/20 transition-all">
+                        <div class="absolute inset-0 bg-gradient-to-bl from-violet-900 via-purple-900 to-slate-900 transition-transform duration-700 group-hover:scale-110"></div>
+                        <!-- Mock UI Element -->
+                        <div class="absolute inset-0 flex items-center justify-center">
+                             <div class="w-3/4 h-3/4 flex gap-2 transform group-hover:scale-105 transition duration-500">
+                                <div class="w-1/3 bg-black/40 backdrop-blur border border-white/10 rounded-l-xl p-2 hidden md:flex flex-col gap-2">
+                                    <div class="w-full h-2 bg-white/10 rounded"></div>
+                                    <div class="w-2/3 h-2 bg-white/10 rounded"></div>
+                                </div>
+                                <div class="flex-1 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-4 flex flex-col gap-3 shadow-lg">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-violet-500/50"></div>
+                                        <div class="space-y-1">
+                                            <div class="w-20 h-2 bg-white/30 rounded"></div>
+                                            <div class="w-12 h-1 bg-white/20 rounded"></div>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2 mt-2">
+                                        <div class="w-full h-1 bg-white/10 rounded"></div>
+                                        <div class="w-full h-1 bg-white/10 rounded"></div>
+                                        <div class="w-3/4 h-1 bg-white/10 rounded"></div>
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
+                         <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500 bg-black/60 backdrop-blur-[2px]">
+                            <span class="px-6 py-3 bg-white text-black rounded-full font-bold transform translate-y-4 group-hover:translate-y-0 transition">Read Case Study</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Project 3: WhatsApp Vault (Image Left) -->
+                <div class="group relative grid md:grid-cols-2 gap-12 items-center reveal">
+                     <a href="project_wavault.html" class="block relative overflow-hidden rounded-2xl aspect-[4/3] bg-gray-900 border border-white/10 hover-trigger cursor-none group-hover:border-white/20 transition-all">
+                        <div class="absolute inset-0 bg-gradient-to-br from-[#0b141a] via-[#111b21] to-[#0c4a6e] transition-transform duration-700 group-hover:scale-110"></div>
+                        <!-- Mock UI Element -->
+                        <div class="absolute inset-0 flex items-center justify-center">
+                             <div class="w-3/4 h-3/4 bg-black/40 backdrop-blur border border-white/10 rounded-xl p-4 flex flex-col shadow-2xl transform group-hover:-translate-y-2 transition duration-500 overflow-hidden relative">
+                                <div class="h-10 bg-[#202c33] border-b border-white/5 flex items-center px-3 mb-2 rounded-t-lg">
+                                    <div class="w-6 h-6 rounded-full bg-white/10"></div>
+                                    <div class="w-20 h-2 bg-white/20 rounded ml-2"></div>
+                                </div>
+                                <div class="flex-1 space-y-3 p-2">
+                                    <div class="self-start bg-[#202c33] p-2 rounded-lg rounded-tl-none w-2/3 h-8"></div>
+                                    <div class="self-end bg-[#005c4b] p-2 rounded-lg rounded-tr-none w-2/3 h-8 ml-auto"></div>
+                                    <div class="self-start bg-red-900/40 border border-red-500/30 p-2 rounded-lg w-2/3 h-8 relative">
+                                        <div class="absolute -top-2 left-0 text-[8px] bg-red-500/20 text-red-300 px-1 rounded">RECOVERED</div>
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
+                         <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500 bg-black/60 backdrop-blur-[2px]">
+                            <span class="px-6 py-3 bg-white text-black rounded-full font-bold transform translate-y-4 group-hover:translate-y-0 transition">Read Case Study</span>
+                        </div>
+                    </a>
+                    <div class="order-first md:order-last">
+                        <span class="text-accent font-mono text-sm mb-4 block">03 / DATA PRIVACY</span>
+                        <h3 class="text-3xl font-bold mb-6">WhatsApp Vault</h3>
+                        <p class="text-gray-400 leading-relaxed mb-8">
+                            A real-time socket interceptor that mirrors WhatsApp traffic to a persistent database. It captures deleted messages and tunnels media to a private Telegram channel, creating an immutable archive without local storage dependence.
+                        </p>
+                        <ul class="flex flex-wrap gap-3">
+                            <li class="px-3 py-1 rounded-full border border-white/10 text-xs text-gray-300">Node.js</li>
+                            <li class="px-3 py-1 rounded-full border border-white/10 text-xs text-gray-300">Baileys (Socket)</li>
+                            <li class="px-3 py-1 rounded-full border border-white/10 text-xs text-gray-300">MongoDB</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-20 border-y border-white/5 bg-white/2 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div class="reveal">
+                    <div class="text-4xl md:text-5xl font-bold font-display text-white mb-2">10k+</div>
+                    <div class="text-sm text-gray-400 uppercase tracking-wider">Lives Touched</div>
+                </div>
+                <div class="reveal" style="transition-delay: 100ms;">
+                    <div class="text-4xl md:text-5xl font-bold font-display text-white mb-2">Free</div>
+                    <div class="text-sm text-gray-400 uppercase tracking-wider">Tools for All</div>
+                </div>
+                <div class="reveal" style="transition-delay: 200ms;">
+                    <div class="text-4xl md:text-5xl font-bold font-display text-white mb-2">100%</div>
+                    <div class="text-sm text-gray-400 uppercase tracking-wider">Open Source</div>
+                </div>
+                <div class="reveal" style="transition-delay: 300ms;">
+                    <div class="text-4xl md:text-5xl font-bold font-display text-white mb-2">User</div>
+                    <div class="text-sm text-gray-400 uppercase tracking-wider">Trust First</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-32 relative z-10 overflow-hidden">
+        <div class="max-w-4xl mx-auto px-6 relative">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-4xl md:text-6xl font-bold mb-6 reveal">Have an idea to help others?</h2>
+                <p class="text-xl text-gray-400 reveal">Whether it's a non-profit tool or a community project, I'd love to hear your story.</p>
+            </div>
+
+            <div class="glass-panel p-8 md:p-12 rounded-3xl reveal flex flex-col items-center justify-center text-center">
+                 <div class="mb-8">
+                     <i data-lucide="mail" class="w-16 h-16 text-accent mx-auto mb-4"></i>
+                     <h3 class="text-2xl font-bold mb-2">Email Me Directly</h3>
+                     <p class="text-gray-400 mb-6">The fastest way to reach me.</p>
+                     <a href="mailto:himanshulm8@gmail.com" class="inline-block px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-full transition transform hover:scale-105 hover-trigger shadow-lg shadow-purple-900/20">
+                        himanshulm8@gmail.com
+                     </a>
+                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/5 relative z-10 text-sm text-gray-500">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p>&copy; 2026 Himanshu. Coding for a better world.</p>
+            <div class="flex gap-6">
+                <a href="https://github.com/himanshulm9-debug" target="_blank" rel="noopener noreferrer" class="hover:text-white transition hover-trigger flex items-center gap-2">
+                    <i data-lucide="github" class="w-4 h-4"></i> GitHub
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- LOGIC -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- 0. PRELOADER ---
+            const preloader = document.getElementById('preloader');
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    preloader.style.opacity = '0';
+                    preloader.style.visibility = 'hidden';
+                }, 500);
+            });
+
+            // --- 1. ICONS ---
+            lucide.createIcons();
+
+            // --- 2. MOBILE MENU LOGIC (FIXED) ---
+            const menuBtn = document.getElementById('menu-btn');
+            const closeMenuBtn = document.getElementById('close-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            function toggleMenu() {
+                const isClosed = mobileMenu.classList.contains('closed');
+                if (isClosed) {
+                    mobileMenu.classList.remove('closed');
+                    mobileMenu.classList.add('open');
+                    document.body.style.overflow = 'hidden'; // Prevent scrolling
+                } else {
+                    mobileMenu.classList.add('closed');
+                    mobileMenu.classList.remove('open');
+                    document.body.style.overflow = '';
+                }
+            }
+
+            menuBtn.addEventListener('click', toggleMenu);
+            closeMenuBtn.addEventListener('click', toggleMenu);
+            
+            // Close menu when a link is clicked
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', toggleMenu);
+            });
+
+
+            // --- 3. CUSTOM CURSOR (OPTIMIZED) ---
+            // Only run on devices with hover capability
+            if (window.matchMedia("(hover: hover)").matches) {
+                const cursorDot = document.getElementById("cursor-dot");
+                const cursorOutline = document.getElementById("cursor-outline");
+                
+                let cursorX = window.innerWidth / 2;
+                let cursorY = window.innerHeight / 2;
+                let outlineX = cursorX;
+                let outlineY = cursorY;
+
+                document.addEventListener("mousemove", (e) => {
+                    cursorX = e.clientX;
+                    cursorY = e.clientY;
+                    
+                    // Direct update for dot (no lag)
+                    cursorDot.style.left = `${cursorX}px`;
+                    cursorDot.style.top = `${cursorY}px`;
+                });
+
+                // Add hover classes
+                document.querySelectorAll('.hover-trigger').forEach(el => {
+                    el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+                    el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+                });
+
+                // Animation Loop for Smooth Outline (Lerp)
+                function animateCursor() {
+                    let distX = cursorX - outlineX;
+                    let distY = cursorY - outlineY;
+                    
+                    outlineX += distX * 0.15;
+                    outlineY += distY * 0.15;
+                    
+                    cursorOutline.style.left = `${outlineX}px`;
+                    cursorOutline.style.top = `${outlineY}px`;
+                    
+                    requestAnimationFrame(animateCursor);
+                }
+                animateCursor();
+            }
+
+
+            // --- 4. SPOTLIGHT CARDS ---
+            const cards = document.querySelectorAll(".spotlight-card");
+            const cardsContainer = document.getElementById("cards-container");
+
+            if(cardsContainer) {
+                cardsContainer.addEventListener("mousemove", (e) => {
+                    for (const card of cards) {
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        card.style.setProperty("--mouse-x", `${x}px`);
+                        card.style.setProperty("--mouse-y", `${y}px`);
+                    }
+                });
+            }
+
+
+            // --- 5. SCROLL REVEAL ---
+            const revealElements = document.querySelectorAll('.reveal');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // Optional: Unobserve after reveal
+                        // revealObserver.unobserve(entry.target); 
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+            revealElements.forEach(el => revealObserver.observe(el));
+
+
+            // --- 6. THREE.JS BACKGROUND (IMPROVED - WAVE EFFECT) ---
+            const canvas = document.getElementById('bg-canvas');
+            
+            if (canvas) {
+                const scene = new THREE.Scene();
+                // Match the background color for seamless blending
+                // scene.background = new THREE.Color('#020617'); 
+                
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                camera.position.y = 20;
+                camera.position.z = 50;
+
+                const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Performance optimization
+
+                // Create a field of particles
+                const geometry = new THREE.BufferGeometry();
+                const count = 3000;
+                
+                const positions = new Float32Array(count * 3);
+                const scales = new Float32Array(count);
+                
+                for(let i = 0; i < count; i++) {
+                    const i3 = i * 3;
+                    // Spread particles on X and Z plane
+                    positions[i3] = (Math.random() - 0.5) * 200;     // x
+                    positions[i3 + 1] = 0;                           // y (will be animated)
+                    positions[i3 + 2] = (Math.random() - 0.5) * 200; // z
+                    
+                    scales[i] = Math.random();
+                }
+                
+                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                geometry.setAttribute('scale', new THREE.BufferAttribute(scales, 1));
+
+                // Shader Material for better performance and glow
+                // But keeping it simple with PointsMaterial for reliability in this context
+                const material = new THREE.PointsMaterial({
+                    size: 0.7,
+                    color: 0x6366f1, // Indigo
+                    transparent: true,
+                    opacity: 0.6,
+                    sizeAttenuation: true,
+                    blending: THREE.AdditiveBlending
+                });
+
+                const particles = new THREE.Points(geometry, material);
+                scene.add(particles);
+
+                // Animation Variables
+                let mouseX = 0;
+                let mouseY = 0;
+                
+                // Throttled resize
+                window.addEventListener('resize', () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+
+                document.addEventListener('mousemove', (event) => {
+                    mouseX = event.clientX / window.innerWidth - 0.5;
+                    mouseY = event.clientY / window.innerHeight - 0.5;
+                });
+
+                const clock = new THREE.Clock();
+
+                function animate() {
+                    const elapsedTime = clock.getElapsedTime();
+
+                    // Animate Camera slightly based on mouse
+                    camera.position.x += (mouseX * 10 - camera.position.x) * 0.05;
+                    camera.position.y += (-mouseY * 10 + 20 - camera.position.y) * 0.05;
+                    camera.lookAt(0, 0, 0);
+
+                    // Wave Effect Calculation
+                    const positions = particles.geometry.attributes.position.array;
+                    
+                    for(let i = 0; i < count; i++) {
+                        const i3 = i * 3;
+                        const x = geometry.attributes.position.array[i3];
+                        const z = geometry.attributes.position.array[i3 + 2];
+                        
+                        // Create a sine wave that moves through the field
+                        // Y = sin(x + time) + cos(z + time)
+                        positions[i3 + 1] = Math.sin(elapsedTime * 0.5 + x * 0.05) * 3 + Math.cos(elapsedTime * 0.3 + z * 0.05) * 3;
+                    }
+                    particles.geometry.attributes.position.needsUpdate = true;
+
+                    renderer.render(scene, camera);
+                    requestAnimationFrame(animate);
+                }
+
+                animate();
+            }
+        });
+    </script>
+</body>
+</html>

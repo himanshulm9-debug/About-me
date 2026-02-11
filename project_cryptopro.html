@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CryptoPro - A case study on democratizing financial data through real-time technology.">
+    <title>CryptoPro | Project Case Study</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        bg: '#020617', // Slate 950
+                        accent: '#38bdf8', // Sky 400
+                        secondary: '#818cf8', // Indigo 400
+                        success: '#4ade80', // Green
+                        danger: '#f87171', // Red
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* --- CORE SETTINGS --- */
+        :root { --cursor-size: 20px; }
+        body { background-color: #020617; color: #ffffff; overflow-x: hidden; }
+
+        @media (hover: hover) and (pointer: fine) {
+            body { cursor: none; }
+            #cursor-dot, #cursor-outline { display: block; }
+        }
+        @media (hover: none) {
+            #cursor-dot, #cursor-outline { display: none; }
+        }
+
+        /* --- UI ELEMENTS --- */
+        .noise-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 9998; opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #38bdf8, #818cf8);
+            border-radius: 4px;
+        }
+
+        /* --- CURSOR --- */
+        #cursor-dot {
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
+            width: 8px; height: 8px; background-color: white; border-radius: 50%;
+            z-index: 9999; pointer-events: none;
+        }
+        #cursor-outline {
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
+            width: 40px; height: 40px; border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%; z-index: 9999; pointer-events: none;
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        body.hovering #cursor-outline {
+            width: 60px; height: 60px;
+            background-color: rgba(56, 189, 248, 0.1);
+            border-color: transparent; backdrop-filter: blur(2px);
+        }
+
+        /* --- GLASSMORPHISM --- */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glass-nav {
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.4; }
+        
+        .text-gradient-primary {
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .reveal {
+            opacity: 0; transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body class="antialiased selection:bg-accent selection:text-white">
+
+    <div class="noise-overlay"></div>
+    <div id="cursor-dot"></div>
+    <div id="cursor-outline"></div>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass-nav">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-xl font-display font-bold tracking-tighter hover-trigger flex items-center gap-2 group">
+                <i data-lucide="arrow-left" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i>
+                HIMANSHU<span class="text-accent">.</span>
+            </a>
+            <a href="index.html#contact" class="px-5 py-2 rounded-full border border-gray-700 hover:border-accent hover:bg-accent/10 transition text-sm font-medium hover-trigger">
+                Let's Build Change
+            </a>
+        </div>
+    </nav>
+
+    <!-- Project Hero -->
+    <header class="relative pt-40 pb-20 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-md reveal">
+                <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                <span class="text-xs font-medium tracking-wider text-gray-300 uppercase">Financial Literacy</span>
+            </div>
+            
+            <h1 class="font-display text-6xl md:text-8xl font-bold mb-6 reveal tracking-tighter" style="transition-delay: 100ms;">
+                CryptoPro
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-gray-400 max-w-2xl mx-auto leading-relaxed reveal" style="transition-delay: 200ms;">
+                Democratizing financial intelligence. A real-time, low-latency market dashboard designed to bring institutional-grade clarity to the everyday user.
+            </p>
+        </div>
+    </header>
+
+    <!-- Project UI Visualization (CSS Drawing of Dashboard.jsx) -->
+    <section class="max-w-6xl mx-auto px-6 mb-32 reveal">
+        <div class="glass-panel rounded-2xl aspect-video w-full overflow-hidden relative group hover-trigger border border-white/10">
+            <!-- Background Glow -->
+            <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-[#0f172a] to-[#1e293b] group-hover:scale-105 transition duration-700"></div>
+            
+            <!-- Abstract Dashboard UI -->
+            <div class="absolute inset-0 p-8 flex flex-col gap-6">
+                <!-- Top Bar -->
+                <div class="h-12 w-full border-b border-white/5 flex items-center justify-between px-4">
+                    <div class="flex gap-4">
+                        <div class="w-32 h-4 bg-white/10 rounded-full"></div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-accent/20"></div>
+                </div>
+
+                <!-- Main Content Grid -->
+                <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Left: List -->
+                    <div class="hidden md:block col-span-1 bg-[#1e293b]/50 rounded-xl border border-white/5 p-4 space-y-3 backdrop-blur-sm">
+                        <div class="w-full h-8 bg-white/5 rounded mb-4"></div>
+                        <div class="flex justify-between items-center"><div class="w-20 h-4 bg-white/10 rounded"></div><div class="w-10 h-4 bg-success/20 rounded"></div></div>
+                        <div class="flex justify-between items-center"><div class="w-24 h-4 bg-white/10 rounded"></div><div class="w-10 h-4 bg-danger/20 rounded"></div></div>
+                        <div class="flex justify-between items-center"><div class="w-16 h-4 bg-white/10 rounded"></div><div class="w-10 h-4 bg-success/20 rounded"></div></div>
+                        <div class="flex justify-between items-center"><div class="w-20 h-4 bg-white/10 rounded"></div><div class="w-10 h-4 bg-success/20 rounded"></div></div>
+                    </div>
+
+                    <!-- Right: Chart & Stats -->
+                    <div class="col-span-1 md:col-span-2 flex flex-col gap-6">
+                        <!-- Stats Row -->
+                        <div class="flex gap-4">
+                            <div class="flex-1 h-24 bg-[#1e293b]/50 rounded-xl border border-white/5 p-4">
+                                <div class="w-8 h-8 bg-yellow-500/20 rounded-lg mb-2"></div>
+                                <div class="w-16 h-4 bg-white/20 rounded"></div>
+                            </div>
+                            <div class="flex-1 h-24 bg-[#1e293b]/50 rounded-xl border border-white/5 p-4">
+                                <div class="w-8 h-8 bg-sky-500/20 rounded-lg mb-2"></div>
+                                <div class="w-16 h-4 bg-white/20 rounded"></div>
+                            </div>
+                        </div>
+                        <!-- Chart Area -->
+                        <div class="flex-1 bg-[#1e293b]/50 rounded-xl border border-white/5 p-6 relative overflow-hidden">
+                            <!-- CSS Chart Line -->
+                            <svg class="absolute bottom-0 left-0 w-full h-2/3 opacity-50" preserveAspectRatio="none">
+                                <path d="M0,100 Q150,50 300,80 T600,20 V150 H0 Z" fill="url(#grad1)" />
+                                <defs>
+                                    <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#38bdf8;stop-opacity:0.4" />
+                                        <stop offset="100%" style="stop-color:#38bdf8;stop-opacity:0" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <svg class="absolute bottom-0 left-0 w-full h-2/3" fill="none" stroke="#38bdf8" stroke-width="2">
+                                <path d="M0,100 Q150,50 300,80 T600,20" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Story -->
+    <section class="max-w-5xl mx-auto px-6 py-20">
+        <div class="grid md:grid-cols-2 gap-16">
+            <div class="reveal">
+                <h2 class="font-display text-3xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="p-2 rounded-lg bg-red-500/10 text-red-400"><i data-lucide="lock" class="w-6 h-6"></i></span>
+                    The Barrier
+                </h2>
+                <p class="text-gray-400 leading-relaxed text-lg mb-8">
+                    Financial markets are often seen as a black box. Complexity, delayed data, and expensive trading terminals create a massive divide between institutional investors and the everyday person. 
+                </p>
+                <p class="text-gray-400 leading-relaxed text-lg">
+                    When data is hard to read or slow to update, people make decisions based on fear rather than fact. I wanted to remove that barrier and create a tool that respects the user's intelligence without requiring a finance degree.
+                </p>
+            </div>
+            
+            <div class="reveal" style="transition-delay: 200ms;">
+                <h2 class="font-display text-3xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="p-2 rounded-lg bg-blue-500/10 text-blue-400"><i data-lucide="unlock" class="w-6 h-6"></i></span>
+                    The Solution
+                </h2>
+                <p class="text-gray-400 leading-relaxed text-lg mb-8">
+                    CryptoPro is a high-performance market dashboard built on React and WebSockets. It connects directly to the Binance stream, delivering millisecond-latency updates on price, volume, and trades.
+                </p>
+                <p class="text-gray-400 leading-relaxed text-lg">
+                    Beyond just raw numbers, I focused on *visual literacy*. The UI uses intuitive color cues, responsive charts (Recharts), and a clutter-free layout to help users spot trends instantly. It adapts to any device, making financial freedom accessible from anywhere.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Deep Dive -->
+    <section class="py-20 bg-white/5 border-y border-white/5 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-16 text-center">
+                <h2 class="font-display text-4xl font-bold mb-4 reveal">Under the Hood</h2>
+                <p class="text-gray-400 reveal">Engineered for speed, stability, and data integrity.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Tech Card 1 -->
+                <div class="glass-panel p-8 rounded-xl reveal hover-trigger group">
+                    <div class="mb-6 text-accent"><i data-lucide="zap" class="w-10 h-10"></i></div>
+                    <h3 class="text-xl font-bold mb-3">Live WebSockets</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                        Instead of polling APIs (which is slow), I implemented a persistent WebSocket connection (`wss://`) to stream ticker data. This ensures the UI reflects the true state of the market with zero lag.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs px-2 py-1 bg-white/10 rounded">Binance Stream</span>
+                        <span class="text-xs px-2 py-1 bg-white/10 rounded">Real-time</span>
+                    </div>
+                </div>
+
+                <!-- Tech Card 2 -->
+                <div class="glass-panel p-8 rounded-xl reveal hover-trigger group" style="transition-delay: 100ms;">
+                    <div class="mb-6 text-secondary"><i data-lucide="bar-chart-2" class="w-10 h-10"></i></div>
+                    <h3 class="text-xl font-bold mb-3">Dynamic Visualization</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                        Leveraging **Recharts** and **Framer Motion**, the application renders complex K-line data into interactive area charts that respond fluidly to user interaction and timeframe changes (24h/7d).
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs px-2 py-1 bg-white/10 rounded">Recharts</span>
+                        <span class="text-xs px-2 py-1 bg-white/10 rounded">Framer Motion</span>
+                    </div>
+                </div>
+
+                <!-- Tech Card 3 -->
+                <div class="glass-panel p-8 rounded-xl reveal hover-trigger group" style="transition-delay: 200ms;">
+                    <div class="mb-6 text-success"><i data-lucide="smartphone" class="w-10 h-10"></i></div>
+                    <h3 class="text-xl font-bold mb-3">Responsive Architecture</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                        A mobile-first layout strategy using CSS Flexbox and Grid. The sidebar adapts to a bottom navigation bar on mobile, ensuring a native-app-like experience on the web.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs px-2 py-1 bg-white/10 rounded">React Router</span>
+                        <span class="text-xs px-2 py-1 bg-white/10 rounded">Tailwind Logic</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Stats -->
+    <section class="py-32 max-w-5xl mx-auto px-6 text-center">
+        <h2 class="font-display text-3xl font-bold mb-16 reveal">Impact Metrics</h2>
+        
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-12">
+            <div class="reveal">
+                <div class="text-5xl font-bold text-gradient-primary mb-2 font-display">100ms</div>
+                <div class="text-sm text-gray-400 uppercase tracking-widest">Data Latency</div>
+            </div>
+            <div class="reveal" style="transition-delay: 100ms;">
+                <div class="text-5xl font-bold text-white mb-2 font-display">10+</div>
+                <div class="text-sm text-gray-400 uppercase tracking-widest">Top Assets Tracked</div>
+            </div>
+            <div class="reveal" style="transition-delay: 200ms;">
+                <div class="text-5xl font-bold text-white mb-2 font-display">100%</div>
+                <div class="text-sm text-gray-400 uppercase tracking-widest">Free Access</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation Footer -->
+    <section class="py-20 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <a href="index.html" class="text-gray-400 hover:text-white transition flex items-center gap-2 hover-trigger">
+                <i data-lucide="arrow-left"></i> Back to Home
+            </a>
+            <a href="project_resumebuilder.html" class="text-white hover:text-accent transition flex items-center gap-2 hover-trigger text-lg font-bold">
+                Next Project: Talent Forge <i data-lucide="arrow-right"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/5 relative z-10 text-sm text-gray-500 bg-black/20">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p>&copy; 2026 Himanshu. Coding for a better world.</p>
+            <div class="flex gap-6">
+                <a href="https://github.com/himanshulm9-debug" target="_blank" rel="noopener noreferrer" class="hover:text-white transition hover-trigger flex items-center gap-2">
+                    <i data-lucide="github" class="w-4 h-4"></i> GitHub
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+
+            // Reveal Animation
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('active');
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+            // Cursor Logic
+            if (window.matchMedia("(hover: hover)").matches) {
+                const dot = document.getElementById("cursor-dot");
+                const outline = document.getElementById("cursor-outline");
+                let mx = window.innerWidth/2, my = window.innerHeight/2;
+                let ox = mx, oy = my;
+
+                document.addEventListener("mousemove", e => { mx = e.clientX; my = e.clientY; dot.style.left = `${mx}px`; dot.style.top = `${my}px`; });
+                
+                const animate = () => {
+                    ox += (mx - ox) * 0.15; oy += (my - oy) * 0.15;
+                    outline.style.left = `${ox}px`; outline.style.top = `${oy}px`;
+                    requestAnimationFrame(animate);
+                };
+                animate();
+
+                document.querySelectorAll('.hover-trigger').forEach(el => {
+                    el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+                    el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+                });
+            }
+
+            // Three.js Background
+            const canvas = document.getElementById('bg-canvas');
+            if (canvas) {
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+                camera.position.z = 30;
+                const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+
+                const geometry = new THREE.BufferGeometry();
+                const count = 1000;
+                const pos = new Float32Array(count * 3);
+                for(let i=0; i<count*3; i++) pos[i] = (Math.random()-0.5) * 100;
+                geometry.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+                const material = new THREE.PointsMaterial({ size: 0.5, color: 0x38bdf8, transparent: true, opacity: 0.3 });
+                const points = new THREE.Points(geometry, material);
+                scene.add(points);
+
+                function animate3D() {
+                    points.rotation.y += 0.001;
+                    renderer.render(scene, camera);
+                    requestAnimationFrame(animate3D);
+                }
+                animate3D();
+
+                window.addEventListener('resize', () => {
+                    camera.aspect = window.innerWidth/window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

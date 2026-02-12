@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <defs>
+        <!-- Light Blue Gradient (Representing Technology & Trust) -->
+        <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#bae6fd" /> <!-- Soft sky blue -->
+            <stop offset="100%" stop-color="#0ea5e9" /> <!-- Deep professional blue -->
+        </linearGradient>
+        
+        <!-- Cream White Gradient (Representing Humanity & Clarity) -->
+        <linearGradient id="creamGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#f8fafc" /> <!-- Cream/Slate-50 -->
+            <stop offset="100%" stop-color="#ffffff" /> <!-- Pure White -->
+        </linearGradient>
+        
+        <!-- Subtle Glow Effect for a premium polish -->
+        <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="2.5" result="blur" />
+            <feComponentTransfer>
+                <feFuncA type="linear" slope="0.6"/>
+            </feComponentTransfer>
+            <feMerge>
+                <feMergeNode />
+                <feMergeNode in="SourceGraphic" />
+            </feMerge>
+        </filter>
+    </defs>
+    
+    <!-- Dark slate background exactly matching your website -->
+    <rect width="100" height="100" rx="22" fill="#020617" />
+    
+    <!-- The Professional 'H' Monogram -->
+    <g filter="url(#softGlow)">
+        <!-- Left Pillar (Cream White) -->
+        <rect x="25" y="22" width="16" height="56" rx="6" fill="url(#creamGrad)" />
+        
+        <!-- Right Pillar (Light Blue) -->
+        <rect x="59" y="22" width="16" height="56" rx="6" fill="url(#blueGrad)" />
+        
+        <!-- Crossbar (Pure White connecting the two) -->
+        <rect x="32" y="42" width="36" height="16" rx="4" fill="#ffffff" opacity="0.95" />
+    </g>
+</svg>

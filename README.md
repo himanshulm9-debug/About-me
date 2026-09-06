@@ -102,7 +102,13 @@ Rather than forcing users to jump between disconnected websites, the platform us
 - **Fluid Micro-Animations & Transitions**:
   - Hardware-accelerated transitions powered by `cubic-bezier(0.16, 1, 0.3, 1)` spring physics.
   - Multi-layer glassmorphism (`backdrop-filter: blur(24px)`) with gradient top-edge highlights and animated ambient radial auroras.
-  - Animated liquid text shimmers (`@keyframes textShimmer`) across master headings.
+### 5. 🚀 Interactive Cockpit, Concept Vault & Pro Indicator Suite
+- **🖥️ Arch Linux Cyber Cockpit (`CyberTerminal.tsx`)**: Full interactive terminal modal (`whoami`, `neofetch`, `concepts`, `ping` easter egg, `skills`, `hobbies`).
+- **🎵 Synthesized Lo-Fi Soundtrack Station (`MusicPlayer.tsx`)**: Ambient audio generator built directly on the Web Audio API with animated equalizer waveforms.
+- **🔐 Classified Concept Vault (`ConceptVault.tsx`)**: Cryptographic matrix cipher text scrambler showcasing proprietary patent-track concepts.
+- **⚡ Spotlight Command Palette (`Ctrl+K` / `Cmd+K`)**: Rapid global keyboard navigator across all apps, docks, and direct contact actions.
+- **📈 Advanced Candlestick Overlays (`CandleChart.tsx`)**: Real-time EMA-20 trend ribbon, volume histogram bars, and bullish/bearish momentum indicator.
+- **🕷️ Core Web Vitals & Report Exporter (`CrawlerTab.tsx`)**: LCP, CLS, INP, and TTFB diagnostics with instant downloadable JSON audit reports and print layouts.
 
 ---
 

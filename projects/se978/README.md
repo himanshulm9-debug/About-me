@@ -1,4 +1,4 @@
-# ⚡ se978 — INDEX MATRIX Technical SEO Engine & DOM Crawler
+# ⚡ se978 — SEO-INDEXING Technical SEO Engine & DOM Crawler
 
 <div align="center">
 
@@ -18,7 +18,7 @@
 
 ## 🌟 Overview
 
-**INDEX MATRIX (`se978`)** is a technical SEO automation suite designed to inspect, audit, and accelerate search engine visibility. Built with a responsive cyberpunk glassmorphism interface, it features deep DOM hierarchy inspection, binary document keyword extraction, and automated Google Indexing API submission.
+**SEO-INDEXING (`se978`)** is a technical SEO automation suite designed to inspect, audit, and accelerate search engine visibility. Built with a responsive cyberpunk glassmorphism interface, it features deep DOM hierarchy inspection, binary document keyword extraction, and automated Google Indexing API submission.
 
 It is accessible both directly via **[se978.vercel.app](https://se978.vercel.app)** and via the main portfolio multi-zone rewrite at **[himanshu-bio.vercel.app/apps/seo](https://himanshu-bio.vercel.app/apps/seo)**.
 
@@ -26,7 +26,7 @@ It is accessible both directly via **[se978.vercel.app](https://se978.vercel.app
 
 ## 🔐 Strict Google Login Gatekeeper & Abuse Protection
 
-To safeguard backend crawler compute and third-party APIs against scrapers and unauthenticated bot abuse, **INDEX MATRIX enforces a zero-guest policy**:
+To safeguard backend crawler compute and third-party APIs against scrapers and unauthenticated bot abuse, **SEO-INDEXING enforces a zero-guest policy**:
 
 ```
 Visitor clicks /apps/seo

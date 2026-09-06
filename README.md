@@ -21,7 +21,7 @@
 | Project Name | Live Production Deployment | Source Code Repository | In-Depth Documentation | Focus Area |
 | :--- | :--- | :--- | :--- | :--- |
 | **Main Bio Hub** | [himanshu-bio.vercel.app](https://himanshu-bio.vercel.app) | [himanshulm9-debug/himanshu-bio-ui](https://github.com/himanshulm9-debug/himanshu-bio-ui) | [Bio Hub Docs](./projects/bio-hub/README.md) | Next.js 16, 3D WebGL Canvas, Bento Grid, Resume Studio |
-| **INDEX MATRIX** | [se978.vercel.app](https://se978.vercel.app) | [himanshulm9-debug/se978](https://github.com/himanshulm9-debug/se978) | [SEO Suite Docs](./projects/se978/README.md) | Technical SEO Crawler, Google Login Gatekeeper, PDF NLP Extractor |
+| **SEO-INDEXING** | [seo978.vercel.app](https://seo978.vercel.app) | [himanshulm9-debug/seo978](https://github.com/himanshulm9-debug/seo978) | [SEO Suite Docs](./projects/se978/README.md) | Technical SEO Crawler, Google Login Gatekeeper, PDF NLP Extractor |
 | **CryptoPro** | [crypto978.vercel.app](https://crypto978.vercel.app) | [himanshulm9-debug/crypto-visualizer](https://github.com/himanshulm9-debug/crypto-visualizer) | [Crypto Docs](./projects/crypto-visualizer/README.md) | Live Candlestick Charts, Binance/CoinGecko Feeds, Pair Search |
 | **Backend API Engine** | `Render.com Web Service` | [himanshulm9-debug/himanshu-bio-server](https://github.com/himanshulm9-debug/himanshu-bio-server) | [Backend Docs](./projects/backend-server/README.md) | Fastify (~75k req/sec), Telegram Cloud Storage Tunnel, Rate Limiting |
 | **YouTube & Gemini Suite** | *Decoupled Service* | [himanshulm9-debug/himanshu-dev](https://github.com/himanshulm9-debug/himanshu-dev) | [AI & Media Docs](./projects/himanshu-dev/README.md) | Persistent Audio Player & Google Gemini AI Conversational Assistant |
@@ -144,7 +144,7 @@ About-me/
     ├── bio-hub/
     │   └── README.md                   # himanshu-bio-ui (Next.js 16, Three.js, Multi-Zone)
     ├── se978/
-    │   └── README.md                   # se978 (INDEX MATRIX SEO Engine & Google Login Gatekeeper)
+    │   └── README.md                   # se978 (SEO-INDEXING Engine & Google Login Gatekeeper)
     ├── crypto-visualizer/
     │   └── README.md                   # crypto-visualizer (CryptoPro Market Charts & Feeds)
     ├── backend-server/
@@ -164,7 +164,7 @@ About-me/
 Each subfolder contains full, standalone documentation with setup instructions, API contracts, and environment variable references:
 
 - 📄 **[`projects/bio-hub/README.md`](./projects/bio-hub/README.md)**: Main Portfolio Hub, 3D Particle Hero, and Multi-Zone Edge config.
-- 📄 **[`projects/se978/README.md`](./projects/se978/README.md)**: INDEX MATRIX SEO Engine, DOM crawler, and Google Auth Gatekeeper.
+- 📄 **[`projects/se978/README.md`](./projects/se978/README.md)**: SEO-INDEXING Engine, DOM crawler, and Google Auth Gatekeeper.
 - 📄 **[`projects/crypto-visualizer/README.md`](./projects/crypto-visualizer/README.md)**: CryptoPro visualizer, chart math, and WebSocket feeds.
 - 📄 **[`projects/backend-server/README.md`](./projects/backend-server/README.md)**: Fastify API endpoints, Telegram storage bridge, and Firebase setup.
 - 📄 **[`projects/himanshu-dev/README.md`](./projects/himanshu-dev/README.md)**: Standalone YouTube streaming player and Google Gemini AI chatbot.

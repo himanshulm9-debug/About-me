@@ -89,7 +89,7 @@ The platform combines three independent Vercel projects into one unified interfa
 | Vercel Deployment | Role | Route on Main Portal | Transition Behavior |
 | :--- | :--- | :--- | :--- |
 | **`himanshu-bio.vercel.app`** | Primary Hub & Portfolio | `/` | Home 3D particle canvas, Bento Grid, Navigation Dock |
-| **`se978.vercel.app`** | INDEX MATRIX Technical SEO Engine ([GitHub: himanshulm9-debug/se978](https://github.com/himanshulm9-debug/se978)) | `/apps/seo` | Streamed via Vercel Edge Rewrite (URL stays on main domain) |
+| **`seo978.vercel.app`** | SEO-INDEXING Technical SEO Engine ([GitHub: himanshulm9-debug/seo978](https://github.com/himanshulm9-debug/seo978)) | `/apps/seo` | Streamed via Vercel Edge Rewrite (URL stays on main domain) |
 | **`crypto978.vercel.app`** | CryptoPro Interactive Charts ([GitHub: himanshulm9-debug/crypto-visualizer](https://github.com/himanshulm9-debug/crypto-visualizer)) | `/apps/crypto` | Streamed via Vercel Edge Rewrite (URL stays on main domain) |
 
 ### Edge Rewrite Configuration (`vercel.json` / `next.config.mjs`)
@@ -207,7 +207,7 @@ himanshu-bio-combined
 │   └── Live Activity & Online Presence Bar
 │
 ├── 2. 🚀 Interactive Applications Hub (/apps)
-│   ├── ⚡ INDEX MATRIX: Technical SEO & Bot Indexing Engine (/apps/seo)
+│   ├── ⚡ SEO-INDEXING: Technical SEO & Bot Indexing Engine (/apps/seo)
 │   │   ├── 🔐 Google Login Gatekeeper (Mandatory Google Auth, 0 free scans)
 │   │   ├── 🔍 Live Web Crawler & Health Velocity Tracker (DOM analysis, radial gauges)
 │   │   ├── 📄 Binary PDF & Document NLP Keyword Extractor (Telegram Tunneling, n-grams)
@@ -314,7 +314,7 @@ himanshu-bio-combined/
 │   │   │   │   │   ├── apps/
 │   │   │   │   │   │   ├── crypto/       # CryptoPro Visualizer (or Vercel Rewrite)
 │   │   │   │   │   │   ├── resume/       # Interactive Resume Builder
-│   │   │   │   │   │   └── seo/          # INDEX MATRIX SEO Suite
+│   │   │   │   │   │   └── seo/          # SEO-INDEXING Suite
 │   │   │   │   │   │       ├── page.tsx      # SEO Dashboard & Radial Gauges
 │   │   │   │   │   │       ├── login/        # Google Login Gatekeeper Modal
 │   │   │   │   │   │       ├── crawler/      # Live DOM Crawler & Health Timeline
@@ -346,7 +346,7 @@ himanshu-bio-combined/
 │       │   │   ├── email.ts              # Resend email dispatcher
 │       │   │   ├── resume.ts             # Resume storage & PDF generator
 │       │   │   ├── cloner.ts             # Website Cloner Puppeteer API
-│       │   │   └── seo/                  # INDEX MATRIX Services
+│       │   │   └── seo/                  # SEO-INDEXING Services
 │       │   │       ├── scan.ts           # Live DOM Crawler & Headings Parser
 │       │   │       ├── links.ts          # Concurrent Broken Link Inspector
 │       │   │       ├── upload.ts         # Binary PDF, NLP Extractor & Telegram Tunnel
@@ -391,7 +391,7 @@ himanshu-bio-combined/
 3. Connect Upstash Redis for distributed sliding-window rate limiting.
 4. Implement Telegram Storage Tunneling (`telegram.ts`) for permanent offloading of uploaded files to private Telegram channel.
 5. Implement Quota Middleware enforcing 20 scans/day for Google users and 0 for guests.
-6. Implement INDEX MATRIX endpoints (`/api/seo/scan`, `/api/seo/upload-document`, `/api/seo/links-check`, `/api/seo/indexer`).
+6. Implement SEO-INDEXING endpoints (`/api/seo/scan`, `/api/seo/upload-document`, `/api/seo/links-check`, `/api/seo/indexer`).
 
 ### Phase 3: Frontend Shell & Multi-Zone Rewrites (Vercel)
 1. Initialize Next.js 16 (App Router) in `apps/frontend` with Tailwind CSS v4 and Framer Motion.
@@ -401,7 +401,7 @@ himanshu-bio-combined/
 
 ### Phase 4: Google Gatekeeper & Application Sandboxes
 1. **Google Login Gatekeeper**: Implement mandatory Google OAuth2 modal blocking unauthenticated access to the SEO platform.
-2. **INDEX MATRIX Suite**: Port the DOM crawler dashboard, radial SVG score gauges, PDF dropzone, and broken link inspector.
+2. **SEO-INDEXING Suite**: Port the DOM crawler dashboard, radial SVG score gauges, PDF dropzone, and broken link inspector.
 3. **Crypto Visualizer**: Migrate interactive chart canvas, CoinGecko price feed, and pair search into `/apps/crypto`.
 4. **Resume Builder**: Port `admin_resume_builder` into React components with Firestore cloud persistence and PDF download into `/apps/resume`.
 

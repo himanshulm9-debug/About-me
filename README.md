@@ -87,6 +87,23 @@ Rather than forcing users to jump between disconnected websites, the platform us
 - Files are asynchronously tunneled to a **Private Telegram Channel** via the Telegram Bot API (`bot.sendDocument()`) for infinite, 100% free cloud storage.
 - Local temporary buffers are immediately purged (`fs.unlinkSync()`), guaranteeing **0 MB permanent server disk usage** on Render.
 
+### 4. 💎 Human-Centric Luxury Aesthetic & Design Tokens
+- **Color Psychology**: Built upon deep velvet obsidian (`#020408` / `#030508`) contrast, illuminated by high-status human-attracting jewel tones:
+  - **Imperial Champagne Gold** (`#F59E0B` to `#FBBF24`): Intellectual mastery, patent-grade innovation, and high prestige.
+  - **Electric Cyan & Ice Diamond** (`#06B6D4` to `#38BDF8`): Institutional security, zero-trust integrity, and financial velocity.
+  - **Emerald Jade & Royal Mint** (`#10B981` to `#34D399`): Algorithmic health, growth, and search indexing diagnostics.
+  - **Royal Velvet Amethyst** (`#8B5CF6` to `#C084FC`): Creative multimedia, cinema, and soundtrack flow.
+- **Typography**:
+  - **Syne** (`font-display`): Avant-garde editorial luxury display for high-impact headlines.
+  - **Outfit** (`font-heading`): Sleek modern luxury neo-grotesque for titles, tabs, and interactive pills.
+  - **Cinzel** (`font-luxury`): Classical haute-couture serif accents for section crowns and monograms.
+  - **Plus Jakarta Sans** (`font-sans`): Ultra-clean, effortlessly legible body typography.
+  - **JetBrains Mono** (`font-mono`): High-precision code, metrics, and systems telemetry.
+- **Fluid Micro-Animations & Transitions**:
+  - Hardware-accelerated transitions powered by `cubic-bezier(0.16, 1, 0.3, 1)` spring physics.
+  - Multi-layer glassmorphism (`backdrop-filter: blur(24px)`) with gradient top-edge highlights and animated ambient radial auroras.
+  - Animated liquid text shimmers (`@keyframes textShimmer`) across master headings.
+
 ---
 
 ## 🌳 Repository Structure

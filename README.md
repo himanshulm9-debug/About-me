@@ -218,7 +218,7 @@ git push -u origin main
 **Himanshu**
 - **GitHub**: [@himanshulm9-debug](https://github.com/himanshulm9-debug)
 - **Live Portfolio**: [https://himanshu-bio.vercel.app](https://himanshu-bio.vercel.app)
-- **Email**: [contact@himanshu.dev](mailto:contact@himanshu.dev)
+- **Email**: [himanshulm9@gmail.com](mailto:himanshulm9@gmail.com)
 
 ---
 

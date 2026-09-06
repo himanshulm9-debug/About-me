@@ -48,6 +48,8 @@
 ---
 
 ### 💡 Engineering & Innovation Philosophy
+- 🎧 **"Vibe Coder" with First-Principles Conceptual Mastery**:
+  I embrace the identity of a **vibe coder**—entering intense flow states with music streaming non-stop in the background, leveraging AI tools and rapid iteration to build complex systems. However, there is a fundamental prerequisite: **I always learn and master the underlying concepts first.** I never prompt or build blindly. I deconstruct the computer science foundations, system internals, network protocols, and data structures first; once the concept is completely clear in my mind, I ride the vibe to turn ambitious ideas into robust, working code at high velocity.
 - 🧠 **"Code for New Concepts Only"**: I don't write repetitive boilerplate for the sake of it. I dedicate my development time exclusively to creating and validating new concepts, novel architectures, and experimental paradigms.
 - ⚡ **Flagship Stealth Invention — Ultra-Low 18 MB Instant Sandboxed Virtual Environment**:
   I have engineered a proprietary **Virtual Environment Software** that is **100% fully sandboxed**, consumes **only 18 MB of RAM** (orders of magnitude lighter than traditional containers or virtual machines), and achieves **0-second instantaneous startup**. Due to its breakthrough proprietary nature, the underlying core architecture cannot be publicly disclosed at this stage; I am actively prioritizing filing for patent protection first. Once intellectual property and patent claims are secured, the full technical architecture, implementation specifications, and benchmarks will be updated and published on GitHub.

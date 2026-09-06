@@ -28,6 +28,48 @@
 
 ---
 
+## 👤 About Me — The Engineer Behind the Screen
+
+> *"I am a simple person. I don't like to pretend to be someone who I am not. I am an introvert who prefers deep focus over small talk. In my zone, I multitask continuously — writing code for new, uncharted concepts with music always playing in the background."*
+
+### 📍 Profile Snapshot
+- **Name**: Himanshu
+- **Location**: Jaipur, Rajasthan, India *(Permanent Address)*
+- **Primary OS**: **Arch Linux** *(Rolling release, zero bloat, user-centric control)*
+- **Mindset**: Independent Researcher, Multitasker, Concept Architect & Builder
+
+---
+
+### 🎓 Academic & Cybersecurity Credentials
+- 🎓 **Master of Computer Applications (MCA) in Cybersecurity** — *Poornima University, Jaipur* (Pursuing)
+- 🎓 **Bachelor of Computer Applications (BCA) in Cybersecurity** — *Parishkar College of Global Excellence (PCGE), Mansarovar, Jaipur* (Completed)
+- 🛡️ **Cybersecurity Focus**: Web application security, cryptographic session integrity, anti-abuse quota engines, and ephemeral cloud tunneling.
+
+---
+
+### 💡 Engineering & Innovation Philosophy
+- 🧠 **"Code for New Concepts Only"**: I don't write repetitive boilerplate for the sake of it. I dedicate my development time exclusively to creating and validating new concepts, novel architectures, and experimental paradigms.
+- 🔐 **Confidential & Stealth Projects**: I have architected multiple proprietary, confidential concept projects featuring novel mechanisms that I am actively evaluating for patent filing and intellectual property protection.
+- ⚡ **AI-Augmented Velocity**: I use AI coding agents, the **Google Antigravity IDE**, and the **Antigravity CLI** as force multipliers to handle large-scale codebases rapidly, saving precious time so I can focus on architectural innovation.
+- 🔬 **Continuous Learning & Daily Research**: Passionate about continuous research across computer science, physics, biology, and daily tech trends. I make it a habit to study breakthrough events that happened across the global tech landscape in the last 24 hours.
+
+---
+
+### 🐧 Why Arch Linux? (The Zero-Bloat Revelation)
+I chose **Arch Linux** as my daily driver because it is ultra-lightweight, lightning-fast, and free of system bloat:
+
+> *When I first installed Arch Linux via `archinstall` and tried running the `ping` command, the package wasn't even present! Other basic network commands were also not installed by default. Initially it was a surprising experience, but it led to a profound revelation about Arch's philosophy: **in Arch Linux, even foundational packages are the user's conscious choice.** Unlike Ubuntu or Kali Linux which come preloaded with gigabytes of background services you never asked for, Arch gives you 100% control over every single package.*
+
+---
+
+### 🎮 Hobbies, Gaming & Life Beyond the Terminal
+- 🎧 **Music**: The essential soundtrack to my development flow. Music is constantly playing in the background while I multitask, build, and experiment.
+- 🎮 **Gaming**: Passionate gamer across multiple universes: **Roblox**, **BGMI (Battlegrounds Mobile India)**, **Free Fire**, **Call of Duty (COD)**, and **Minecraft**.
+- 🎬 **Movies**: Avid film enthusiast who loves watching immersive movies and cinematic stories.
+- 🌐 **Tech & Science Discovery**: Deep-diving into security advisories, biotech developments, and decentralized platforms.
+
+---
+
 ## 🏛️ Architecture Highlights
 
 ### 1. 🌐 Seamless Vercel Multi-Zone Edge Rewrites

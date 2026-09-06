@@ -23,6 +23,7 @@
 - 🎴 **Cyberpunk Bento Grid**: High-density interactive application cards with hover spotlights and instant launcher buttons.
 - 🌐 **Vercel Multi-Zone Edge Router**: Routes `/apps/seo/*` and `/apps/crypto/*` to independent Vercel deployments at the edge in `<50ms` with zero reload flash.
 - 🛸 **Shared Glassmorphic Dock**: Floating Mac-style navigation dock with automatic background hover pre-fetching (`<link rel="prefetch">`).
+- 👤 **Persona & Mindset Showcase**: Interactive cards featuring cybersecurity credentials (MCA at Poornima University, BCA at PCGE Parishkar), Arch Linux cockpit, concept-only development ethos, and gaming/soundtrack dashboard.
 - 📝 **Resume Studio**: Interactive resume builder with ATS-friendly templates and instant PDF generation.
 
 ---

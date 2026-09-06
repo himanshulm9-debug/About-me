@@ -26,12 +26,12 @@ It runs standalone on Vercel at **[crypto978.vercel.app](https://crypto978.verce
 
 ## ✨ Features & Architecture
 
-- 📈 **Interactive Price History Charts (`HistoryChart.jsx`)**: High-performance canvas-rendered charts with customizable timeframes (24h, 7d, 30d, 1y) and cursor inspection tooltips.
-- 🪙 **Live Market Overview (`Dashboard.jsx`)**: Instant snapshot of the global crypto market, including 24-hour total trading volume, Bitcoin dominance, and trending tokens.
-- 🔍 **Real-Time Market Table & Search (`Market.jsx`)**: Real-time filtering and sorting across top 100+ cryptocurrencies with 24-hour price change percentage badges and liquidity metrics.
-- 📊 **Deep Coin Inspection (`CoinPage.jsx`)**: Detailed coin profiles displaying circulating supply, all-time high (ATH), all-time low (ATL), market rank, and official contract addresses.
-- 💱 **Multi-Currency Converter**: Dynamic conversion between major fiat currencies (USD, EUR, INR, GBP) and crypto pairs.
-- 🎨 **Glassmorphic Cyber-Dark Interface**: Designed with dark theme aesthetics, custom CSS transitions, and zero layout shift.
+- 📈 **Interactive Price History Charts (`CandleChart.tsx`)**: High-performance HTML5 canvas-rendered candlestick and smooth bezier line charts with customizable timeframes (24h, 7d, 30d, 1y), volume bars, and crosshair inspection tooltips.
+- 🪙 **Live Market Overview (`MarketStats.tsx`)**: Instant snapshot of the global crypto market, including total market cap, 24-hour trading volume, BTC and ETH dominance badges with live pulsing indicators.
+- 🔍 **Real-Time Market Table & Search (`MarketTable.tsx`)**: Real-time filtering and sorting across top 100+ cryptocurrencies with 24-hour price change percentage badges, 7-day trend sparklines, and liquidity metrics.
+- 📊 **Deep Coin Inspection Drawer (`CoinDrawer.tsx`)**: Slide-out modal drawer displaying circulating supply, all-time high (ATH), all-time low (ATL), market rank, price change stats, and direct trading links.
+- 💱 **Multi-Currency Converter (`CurrencySelector.tsx`)**: Dynamic conversion between major fiat currencies (USD, EUR, INR, GBP, JPY) and crypto pairs with live exchange multipliers.
+- 🎨 **Glassmorphic Cyber-Dark Interface**: Designed with Tailwind CSS, custom dark mode aesthetics, smooth dock navigation, and zero layout shift.
 
 ---
 
@@ -81,6 +81,9 @@ npm install
 
 # Start Vite local development server
 npm run dev
+
+# Build for production
+npm run build
 ```
 Open [http://localhost:5173](http://localhost:5173) in your browser.
 
@@ -88,9 +91,9 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ## 🛠️ Tech Stack
 
-- **Framework**: React 19
+- **Language & Framework**: TypeScript 5.7, React 19
 - **Bundler & Tooling**: Vite 6, Rollup
-- **Styling**: Vanilla CSS3 with Cyber-Glass Design Tokens
+- **Styling**: Tailwind CSS with Cyber-Glass Design Tokens
 - **Market Data APIs**: CoinGecko & Binance Public REST APIs
 - **Deployment**: Vercel Serverless Edge
 

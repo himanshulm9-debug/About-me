@@ -50,31 +50,27 @@ Visitor clicks /apps/seo
 
 ## 🛠️ Core Diagnostic Modules
 
-### 1. Live Web Crawler & DOM Security Inspector (`index.html`)
+### 1. Live Web Crawler & DOM Security Inspector (`CrawlerTab.tsx`)
 - Parses complete HTML DOM structure, HTTP response headers, OpenGraph / Twitter Cards, canonical tags, and robots directives.
 - Real-time accessibility, contrast, and mobile viewport responsive checks.
 - Dynamic animated SVG radial health gauges with color-graded feedback.
 
-### 2. Binary PDF & Document NLP Keyword Extractor (`audit.html`)
-- Server-side binary `pdf-parse` streaming engine for `.pdf`, `.docx`, `.txt`, and `.csv`.
+### 2. Binary PDF & Document NLP Keyword Extractor (`NlpUploadTab.tsx`)
+- Drag-and-drop document NLP keyword extraction engine supporting `.pdf`, `.docx`, `.txt`, and `.csv`.
 - Extracts 1-, 2-, and 3-word n-gram keyphrases, keyword density percentages, and search intent classification.
 - Document uploads are processed ephemerally and tunneled to Telegram Cloud Storage, consuming **0 MB permanent disk**.
 
-### 3. Competitor Keyword Gap & Overlap Engine (`keywords.html`)
+### 3. Competitor Keyword Gap & Overlap Engine (`CompetitorGapTab.tsx`)
 - Side-by-side crawl comparison of your domain against competitor URLs.
 - Identifies common ranking keywords, missed keyword opportunities, and content gaps.
 
-### 4. Real-Time Broken Link & Redirect Inspector (`console.html`)
+### 4. Real-Time Broken Link & Redirect Inspector (`BrokenLinksTab.tsx`)
 - Concurrently probes internal and external hyperlinks for `200 OK`, `301/302` redirects, and `404/500` dead links.
 - Exportable CSV audit reports with response latency profiling.
 
-### 5. SEO Health Score Velocity Tracker (`reports.html`)
-- Tracks longitudinal website health scores across sequential audits.
-- Multi-dimensional velocity charts covering On-Page, Performance, Crawlability, and Keywords.
-
-### 6. Search Engine Bot Dispatcher (`indexer.html`)
+### 5. Search Engine Bot Dispatcher (`BotIndexerTab.tsx`)
 - Automated batch submission of URLs and XML sitemaps to Google Indexing API and IndexNow.
-- Validates Google Cloud Service Account JSON keys before publishing.
+- Validates Google Cloud Service Account JSON keys before publishing with a 20-second anti-abuse cooldown.
 
 ---
 
@@ -88,13 +84,23 @@ cd se978
 # Install dependencies
 npm install
 
-# Setup environment variables
-cp .env.example .env
-
 # Run local development server
-node server.js
+npm run dev
+
+# Build for production
+npm run build
 ```
-The suite will launch at `http://localhost:8080`.
+The Vite development server will launch at `http://localhost:5174`.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Language & Framework**: TypeScript 5.7, React 19
+- **Bundler & Tooling**: Vite 6, Rollup
+- **Styling**: Tailwind CSS with Cyber-Glass Design Tokens
+- **Authentication**: Strict Google OAuth Gatekeeper Modal (`GoogleGatekeeperModal.tsx`)
+- **Deployment**: Vercel Serverless Edge
 
 ---
 

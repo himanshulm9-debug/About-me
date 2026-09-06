@@ -26,11 +26,12 @@ It runs standalone on Vercel at **[crypto978.vercel.app](https://crypto978.verce
 
 ## ✨ Features & Architecture
 
-- 📈 **Interactive Price History Charts (`CandleChart.tsx`)**: High-performance HTML5 canvas-rendered candlestick and smooth bezier line charts with customizable timeframes (24h, 7d, 30d, 1y), volume bars, and crosshair inspection tooltips.
-- 🪙 **Live Market Overview (`MarketStats.tsx`)**: Instant snapshot of the global crypto market, including total market cap, 24-hour trading volume, BTC and ETH dominance badges with live pulsing indicators.
-- 🔍 **Real-Time Market Table & Search (`MarketTable.tsx`)**: Real-time filtering and sorting across top 100+ cryptocurrencies with 24-hour price change percentage badges, 7-day trend sparklines, and liquidity metrics.
-- 📊 **Deep Coin Inspection Drawer (`CoinDrawer.tsx`)**: Slide-out modal drawer displaying circulating supply, all-time high (ATH), all-time low (ATL), market rank, price change stats, and direct trading links.
-- 💱 **Multi-Currency Converter (`CurrencySelector.tsx`)**: Dynamic conversion between major fiat currencies (USD, EUR, INR, GBP, JPY) and crypto pairs with live exchange multipliers.
+- 📈 **Multi-Asset Candlestick & Area Charts (`CandleChart.tsx`)**: High-performance HTML5 canvas-rendered candlestick and smooth bezier line charts with customizable timeframes (24h, 7d, 30d, 1y), volume histogram bars, asset exchange tags, and crosshair inspection tooltips.
+- 🪙 **Live Crypto Market Overview (`MarketStats.tsx`) & Top 100 Screener (`MarketTable.tsx`)**: Real-time snapshot of the global crypto market, BTC & ETH dominance, 24-hour trading volume, and filtering across 100+ cryptocurrencies with 7-day sparklines.
+- 🏢 **Global Stocks Tab & Top 200 Screener (`StockTable.tsx`)**: Enterprise-grade equities screener covering 200 top-performing stocks across all major sectors (Technology & AI, Semiconductors, Financials, Healthcare, Consumer, Energy, CleanTech) with search, sector pills, quick presets (Top Gainers, Top Losers, High Volume, Mega Cap $200B+, High Dividend, Low P/E), and multi-column sorting.
+- ⚡ **Live Tape & Last Executed Trades (`StockLastTrades.tsx`)**: Real-time simulated NYSE & NASDAQ trade print stream with execution timestamps, buy/sell/block order tags, share sizes, and notional dollar values.
+- 📊 **Deep Fundamentals & Coin Inspection Drawers (`StockDrawer.tsx` & `CoinDrawer.tsx`)**: Slide-out modal drawers displaying 52-week high/low progress gauges, trailing and forward P/E, EPS, Beta, dividend yields, Wall Street 12-month target prices with upside %, and direct research links.
+- 💱 **Multi-Currency Converter (`CurrencySelector.tsx`)**: Dynamic conversion between major fiat currencies (USD, EUR, INR, GBP, JPY) applied seamlessly across both Crypto and Stocks with live exchange multipliers.
 - 🎨 **Glassmorphic Cyber-Dark Interface**: Designed with Tailwind CSS, custom dark mode aesthetics, smooth dock navigation, and zero layout shift.
 
 ---

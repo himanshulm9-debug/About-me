@@ -83,25 +83,40 @@ Each subfolder contains full, standalone documentation with setup instructions, 
 
 ---
 
-## 🚀 Pushing This Repository to GitHub
+## 🚀 1-Command Multi-Repo Sync Tool (`push-all.sh`)
 
-To link and push this directory to your GitHub account repository (`himanshulm9-debug/About-me`):
+Instead of manually navigating into 5 separate folders to commit and push changes, you can manage the entire ecosystem with a single command from the root directory:
+
+```bash
+# Check git status across all 5 repositories
+./push-all.sh status
+
+# Automatically stage, commit, and push changes across all 5 repos
+./push-all.sh "feat: sync updates across portfolio ecosystem"
+
+# Create missing repos on GitHub via GitHub CLI
+./push-all.sh create
+```
+
+### GitHub CLI One-Time Authentication:
+If you haven't authenticated GitHub CLI (`gh`) yet:
+```bash
+gh auth login
+# 1. Select GitHub.com -> HTTPS
+# 2. Select 'Yes' to authenticate Git with GitHub credentials
+# 3. Choose 'Login with a web browser' and confirm authorization
+```
+
+---
+
+## 🛠️ Manual Publication (Individual Repository)
+
+If you prefer to manually manage this repository alone:
 
 ```bash
 cd "/home/hj/Desktop/bio ultimate/About-me"
-
-# Initialize git repository
-git init
-git branch -M main
-
-# Stage and commit all files
 git add .
-git commit -m "feat: complete master portfolio documentation & project directory"
-
-# Add your GitHub remote (replace with your repo URL)
-git remote add origin https://github.com/himanshulm9-debug/About-me.git
-
-# Push to main
+git commit -m "feat: update documentation"
 git push -u origin main
 ```
 

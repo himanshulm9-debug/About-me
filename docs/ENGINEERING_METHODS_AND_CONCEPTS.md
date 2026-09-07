@@ -181,7 +181,7 @@ export function mergeGuestHistoryToUser(guestId: string, userUid: string): void 
 }
 ```
 
-##### 3. Backend Reconciliation Protocol ([`apps/backend/src/store/userStore.ts`](https://github.com/himanshulm9-debug/himanshu-bio-combined/blob/main/apps/backend/src/store/userStore.ts))
+##### 3. Backend Reconciliation Protocol ([`apps/backend/src/services/store.ts`](https://github.com/himanshulm9-debug/himanshu-bio-combined/blob/main/apps/backend/src/services/store.ts))
 ```ts
 linkGuestToUser(guestId: string, userKey: string): void {
   const guestRecord = this.users.get(guestId);

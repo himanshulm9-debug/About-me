@@ -82,14 +82,33 @@ A structured inventory of foundational software paradigms and methods engineered
   Researched and prototyped a next-generation operating system paradigm where autonomous AI engines are granted first-class native access to system primitives, process scheduling, and memory structures. Solved the existential security challenge of giving AI full system access by embedding in-kernel **eBPF (Extended Berkeley Packet Filter)** LSM and kprobe guardrails to trace and intercept unauthorized operations with sub-microsecond latency. Replaced legacy hierarchical directory paths with an associative, multi-dimensional **Tag-Based Semantic File System (TFS)**.
 - 🔐 **Confidential & Stealth Projects**: I have authored multiple proprietary confidential concept projects featuring novel mechanisms that I am actively evaluating for patent filing and intellectual property protection.
 - ⚡ **AI-Augmented Velocity**: I use AI coding agents, the **Google Antigravity IDE**, and the **Antigravity CLI** as force multipliers to handle large-scale codebases rapidly, saving precious time so I can focus on architectural innovation.
-- 🔬 **Continuous Learning & Daily Research**: Passionate about continuous research across computer science, physics, biology, and daily tech trends. I make it a habit to study breakthrough events that happened across the global tech landscape in the last 24 hours.
+- 🔬 **Continuous Daily Research & Learning Philosophy**:
+  My core life philosophy is grounded in relentless curiosity: **I research daily about cutting-edge tech, computer science breakthroughs, hardware releases, physics, and biology.** I study breakthrough global tech events every single day, continuously learning new concepts to keep myself ahead of the technological frontier.
 
 ---
 
-### 🐧 Why Arch Linux? (The Zero-Bloat Revelation)
-I chose **Arch Linux** as my daily driver because it is ultra-lightweight, lightning-fast, and free of system bloat:
+### 🐧 The Pure Arch Linux Cockpit & Development Strategy
+I chose **Arch Linux** as my primary bare-metal daily driver because it is ultra-lightweight, lightning-fast, and completely free of operating system bloat:
 
-> *When I first installed Arch Linux via `archinstall` and tried running the `ping` command, the package wasn't even present! Other basic network commands were also not installed by default. Initially it was a surprising experience, but it led to a profound revelation about Arch's philosophy: **in Arch Linux, even foundational packages are the user's conscious choice.** Unlike Ubuntu or Kali Linux which come preloaded with gigabytes of background services you never asked for, Arch gives you 100% control over every single package.*
+> *"When I first installed Arch Linux via `archinstall` and tried running the `ping` command, the package wasn't even present! Other basic network commands were also not installed by default. Initially it was a surprising experience, but it led to a profound revelation about Arch's philosophy: **in Arch Linux, even foundational packages are the user's conscious choice.** Unlike Ubuntu or Kali Linux which come preloaded with gigabytes of background services you never asked for, Arch gives you 100% control over every single package."*
+
+#### ⚡ The Strategy I Use Most of the Time:
+1. **Bare-Metal Sovereignty**: I develop directly on the metal in Arch Linux without container abstraction or virtualization lag, giving my development tools direct memory and CPU access.
+2. **Concept-First Deconstruction + AI Vibe Coding**: Before writing code, I deconstruct kernel primitives, systems architecture, and protocols until the mental model is 100% crystal clear. Once mastered, I enter deep vibe coding flow states with non-stop music streaming, using AI coding agents as high-velocity force multipliers.
+3. **Engineering Native Apps for Linux**: I don't just use Linux; **I build native applications specifically for Linux**. For example, I built [**SmallExcel**](./projects/smallexcel/README.md) as a pure C++20 / Qt6 standalone 316 KB desktop spreadsheet with custom `.smxl` binary matrix serialization, replacing heavy 400 MB office suites with instant 0-second launch speeds.
+4. **Bespoke Features for Personal Operational Workflows**: I regularly engineer custom Linux features and utility scripts for myself—including automated mouse drag-to-paint tick-toggling engines, duplicate account highlighters, sequential account generators, and automated Discord/Telegram operational summaries to manage 20 to 500+ accounts across gaming operations.
+
+---
+
+### 🖥️ Hardware Architecture, PC & Workstation Engineering
+Beyond software systems, I have deep, first-principles technical knowledge of **physical computer hardware, PC builds, and workstation architectures**:
+
+- 🧠 **CPU Micro-Architectures & Instruction Pipelines**: Deep comprehension of instructions per clock (IPC), thermal throttling profiles, clock frequency curves, PCIe lane allocation/bifurcation, and multi-tier cache hierarchies (L1, L2, and shared L3 cache latency).
+- 🎮 **GPU Compute Architectures & Memory Bandwidth**: Understanding of CUDA/compute core parallelism, tensor cores, ray-tracing pipelines, thermal dissipation envelopes (TDP), and VRAM memory bus architectures (GDDR6/GDDR6X/HBM memory bandwidth).
+- ⚡ **Motherboard Chipsets & Power Delivery (VRMs)**: Understanding of motherboard trace layouts, chipset bus bandwidth, and VRM (Voltage Regulator Module) phase configurations (clean power delivery, MOSFET thermals, and choke quality) essential for stable sustained workstation compute loads.
+- 🏎️ **RAM Timings & Memory Sub-Timings**: First-principles knowledge of DDR4 and DDR5 memory architectures, memory controller frequency scaling, primary timings (CAS latency, tRCD, tRP, tRAS), sub-timings (tRFC, tREFI), dual-channel vs quad-channel memory bandwidth, and ECC (Error-Correcting Code) memory validation for critical workstation workloads.
+- 💾 **High-Velocity Storage Subsystems**: NVMe PCIe Gen4 and Gen5 direct bus lanes, IOPS performance curves, thermal heatsink dissipation, and direct storage streaming pipelines.
+- 🔧 **Custom Workstation Assembly & Diagnostics**: Hands-on expertise in custom high-performance PC assembly, component pairing balance (eliminating bottlenecks), thermal paste application, airflow static pressure balance, and low-level Linux hardware diagnostic tooling (`lspci`, `lscpu`, `dmesg`, `hwinfo`, `smartctl`).
 
 ---
 

@@ -50,7 +50,7 @@ Open [http://localhost:3000](http://localhost:3000).
 ```json
 {
   "rewrites": [
-    { "source": "/apps/seo/:path*", "destination": "https://se978.vercel.app/:path*" },
+    { "source": "/apps/seo/:path*", "destination": "https://seo978.vercel.app/:path*" },
     { "source": "/apps/crypto/:path*", "destination": "https://crypto978.vercel.app/:path*" }
   ]
 }

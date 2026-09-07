@@ -18,7 +18,7 @@
 
 ## 🌟 Overview
 
-**`himanshu-bio-server`** is the headless API and microservice backend serving the **Bio Hub (`himanshu-bio.vercel.app`)** and **SEO Engine (`se978.vercel.app`)**. It provides real-time DOM crawler parsing, rate-limiting & quota tracking, and document ingestion without incurring cloud disk storage fees.
+**`himanshu-bio-server`** is the headless API and microservice backend serving the **Bio Hub (`himanshu-bio.vercel.app`)** and **SEO Engine (`seo978.vercel.app`)**. It provides real-time DOM crawler parsing, rate-limiting & quota tracking, and document ingestion without incurring cloud disk storage fees.
 
 ---
 
@@ -116,7 +116,7 @@ The server will start listening at `http://localhost:5000`.
 ```env
 PORT=5000
 NODE_ENV=development
-ALLOWED_ORIGINS=https://himanshu-bio.vercel.app,https://se978.vercel.app,https://crypto978.vercel.app
+ALLOWED_ORIGINS=https://himanshu-bio.vercel.app,https://seo978.vercel.app,https://crypto978.vercel.app
 
 # Telegram Cloud Storage Tunnel
 TELEGRAM_BOT_TOKEN=123456789:ABCdefGHIjklMNOpqrsTUVwxyz

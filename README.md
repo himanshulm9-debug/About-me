@@ -4,7 +4,7 @@
 
 [![GitHub Profile](https://img.shields.io/badge/GitHub-himanshulm9--debug-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/himanshulm9-debug)
 [![Main Hub](https://img.shields.io/badge/Main%20Hub-himanshu--bio.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://himanshu-bio.vercel.app)
-[![SEO Suite](https://img.shields.io/badge/SEO%20Engine-se978.vercel.app-0070F3?style=for-the-badge&logo=google&logoColor=white)](https://se978.vercel.app)
+[![SEO Suite](https://img.shields.io/badge/SEO%20Engine-seo978.vercel.app-0070F3?style=for-the-badge&logo=google&logoColor=white)](https://seo978.vercel.app)
 [![Crypto Suite](https://img.shields.io/badge/Crypto%20App-crypto978.vercel.app-00E599?style=for-the-badge&logo=bitcoin&logoColor=white)](https://crypto978.vercel.app)
 [![Backend Engine](https://img.shields.io/badge/Backend%20API-Render.com-46E3B7?style=for-the-badge&logo=render&logoColor=black)](https://render.com)
 
@@ -21,7 +21,7 @@
 | Project Name | Live Production Deployment | Source Code Repository | In-Depth Documentation | Focus Area |
 | :--- | :--- | :--- | :--- | :--- |
 | **Main Bio Hub** | [himanshu-bio.vercel.app](https://himanshu-bio.vercel.app) | [himanshulm9-debug/himanshu-bio-ui](https://github.com/himanshulm9-debug/himanshu-bio-ui) | [Bio Hub Docs](./projects/bio-hub/README.md) | Next.js 16, 3D WebGL Canvas, Bento Grid, Resume Studio |
-| **SEO-INDEXING** | [seo978.vercel.app](https://seo978.vercel.app) | [himanshulm9-debug/seo978](https://github.com/himanshulm9-debug/seo978) | [SEO Suite Docs](./projects/se978/README.md) | Technical SEO Crawler, Google Login Gatekeeper, PDF NLP Extractor |
+| **SEO-INDEXING** | [seo978.vercel.app](https://seo978.vercel.app) | [himanshulm9-debug/seo978](https://github.com/himanshulm9-debug/seo978) | [SEO Suite Docs](./projects/seo978/README.md) | Technical SEO Crawler, Google Login Gatekeeper, PDF NLP Extractor |
 | **CryptoPro** | [crypto978.vercel.app](https://crypto978.vercel.app) | [himanshulm9-debug/crypto-visualizer](https://github.com/himanshulm9-debug/crypto-visualizer) | [Crypto Docs](./projects/crypto-visualizer/README.md) | Live Candlestick Charts, Binance/CoinGecko Feeds, Pair Search |
 | **Website Cloner Studio** | [himanshu-bio.vercel.app/apps/cloner](https://himanshu-bio.vercel.app/apps/cloner) | [himanshulm9-debug/himanshu-bio-ui](https://github.com/himanshulm9-debug/himanshu-bio-ui) | [Methods Spec](./docs/ENGINEERING_METHODS_AND_CONCEPTS.md#01-zero-backend-in-browser-website-cloner-architecture) | Zero-Backend Client-Side DOM & Streaming In-Browser ZIP Bundler |
 | **Admin Command Center** | [himanshu-bio.vercel.app/admin](https://himanshu-bio.vercel.app/admin) | [himanshulm9-debug/himanshu-bio-ui](https://github.com/himanshulm9-debug/himanshu-bio-ui) | [Methods Spec](./docs/ENGINEERING_METHODS_AND_CONCEPTS.md#07-live-admin-quota-slider--telemetry-synchronization) | Level 5 Zero-Trust Admin Dashboard, User Quota Sliders, Telemetry |
@@ -48,6 +48,7 @@ A structured inventory of foundational software paradigms and methods engineered
 9. **Security Hardening & Zero Passkey Leakage**: Enforced masked inputs (`type="password"`), removed all authorization hints from HTML placeholders, and decoupled public social handles from clearance tokens.
 10. **Route-Aware Floating Navigation Dock**: Uses `usePathname()` to automatically suppress the consumer dock on `/admin` and restricts `#contact` strictly to the homepage (`/`) where the anchor section resides.
 11. **1-Command Multi-Repository Git Subtree Orchestration**: Automated multi-remote dispatch (`./push-all.sh --all`) that stages, slices subtrees, and updates 6 independent GitHub repositories in a single terminal command.
+12. **Hardware Architecture, Workstation Tuning & Daily Research Philosophy**: Deep first-principles physical silicon mastery (CPU IPC & cache hierarchies, GPU VRAM bandwidth, Motherboard VRM phase power regulation, DDR4/DDR5 sub-timings, and NVMe Gen4/Gen5 DirectStorage) unified with a daily 24/7 research ethos studying global technology, computer science, and physics breakthroughs.
 
 ---
 
@@ -124,13 +125,14 @@ Beyond software systems, I have deep, first-principles technical knowledge of **
 
 ### 1. 🌐 Seamless Vercel Multi-Zone Edge Rewrites
 Rather than forcing users to jump between disconnected websites, the platform uses **Vercel Edge Rewrites** to stream distinct deployments under a single unified address bar:
-- `/apps/seo/*` ➔ Streamed from `https://se978.vercel.app` in `<50ms`.
+- `/apps/seo/*` ➔ Streamed from `https://seo978.vercel.app` in `<50ms`.
 - `/apps/crypto/*` ➔ Streamed from `https://crypto978.vercel.app` in `<50ms`.
 - The user's URL bar stays clean on `himanshu-bio.vercel.app` with zero reload flash and shared glassmorphic dock navigation.
 
-### 2. 🔐 Mandatory Google Login Gatekeeper (SEO Platform)
-- **Strict Zero-Guest Policy**: Guests cannot run scans. Clicking the SEO platform immediately opens the Google Login modal.
-- **Quota Protection**: Google authenticated users receive **20 scans / day** (tracked in Firebase Firestore), while Admin accounts retain unlimited scans.
+### 2. 🔐 Persistent Guest Device UID & Account Unification (SEO Platform)
+- **Frictionless Guest Allowance**: Anonymous visitors receive a permanent browser UID (`guest_xxx`) with a 20-scan trial and 20s cooldown.
+- **Automated Data Unification**: The instant a user signs in with Google, all prior guest scans, document analyses, and broken link audits are automatically migrated into their permanent Google identity with zero data loss.
+- **Admin Quota Slider & Real-Time Sync**: Daily user quotas (0 to 200+ scans/day) and active/blocked statuses are dynamically adjusted via the Admin Command Center (`/admin`).
 
 ### 3. ✈️ Telegram Cloud Storage Tunneling
 - Document uploads (PDFs, resumes, text) are processed ephemerally on Render.com in RAM/`/tmp`.
@@ -185,8 +187,8 @@ About-me/
 └── projects/
     ├── bio-hub/
     │   └── README.md                   # himanshu-bio-ui (Next.js 16, Three.js, Multi-Zone)
-    ├── se978/
-    │   └── README.md                   # se978 (SEO-INDEXING Engine & Google Login Gatekeeper)
+    ├── seo978/
+    │   └── README.md                   # seo978 (SEO-INDEXING Engine & Google Login Gatekeeper)
     ├── crypto-visualizer/
     │   └── README.md                   # crypto-visualizer (CryptoPro Market Charts & Feeds)
     ├── backend-server/
@@ -206,7 +208,7 @@ About-me/
 Each subfolder contains full, standalone documentation with setup instructions, API contracts, and environment variable references:
 
 - 📄 **[`projects/bio-hub/README.md`](./projects/bio-hub/README.md)**: Main Portfolio Hub, 3D Particle Hero, and Multi-Zone Edge config.
-- 📄 **[`projects/se978/README.md`](./projects/se978/README.md)**: SEO-INDEXING Engine, DOM crawler, and Google Auth Gatekeeper.
+- 📄 **[`projects/seo978/README.md`](./projects/seo978/README.md)**: SEO-INDEXING Engine, DOM crawler, and Google Auth Gatekeeper.
 - 📄 **[`projects/crypto-visualizer/README.md`](./projects/crypto-visualizer/README.md)**: CryptoPro visualizer, chart math, and WebSocket feeds.
 - 📄 **[`projects/backend-server/README.md`](./projects/backend-server/README.md)**: Fastify API endpoints, Telegram storage bridge, and Firebase setup.
 - 📄 **[`projects/himanshu-dev/README.md`](./projects/himanshu-dev/README.md)**: Standalone YouTube streaming player and Google Gemini AI chatbot.

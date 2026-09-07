@@ -199,12 +199,12 @@
         <main class="max-w-7xl mx-auto px-6 pb-24 space-y-12">
             <!-- Filter Bar -->
             <div class="flex items-center justify-center flex-wrap gap-2 pt-4">
-                <button onclick="filterMethods('all')" class="filter-btn px-4 py-2 rounded-xl bg-amber-500 text-black font-mono text-xs font-bold transition-all">All Concepts</button>
-                <button onclick="filterMethods('client')" class="filter-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 font-mono text-xs transition-all">Client & Browser</button>
-                <button onclick="filterMethods('auth')" class="filter-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 font-mono text-xs transition-all">Identity & Security</button>
-                <button onclick="filterMethods('edge')" class="filter-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 font-mono text-xs transition-all">Edge & Cloud</button>
-                <button onclick="filterMethods('audio')" class="filter-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 font-mono text-xs transition-all">Audio & Media</button>
-                <button onclick="filterMethods('hardware')" class="filter-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 font-mono text-xs transition-all">Hardware & Systems</button>
+                <button onclick="filterMethods('all', event)" class="filter-btn px-4 py-2 rounded-xl bg-amber-500 text-black font-mono text-xs font-bold transition-all">All Concepts</button>
+                <button onclick="filterMethods('client', event)" class="filter-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 font-mono text-xs transition-all">Client & Browser</button>
+                <button onclick="filterMethods('auth', event)" class="filter-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 font-mono text-xs transition-all">Identity & Security</button>
+                <button onclick="filterMethods('edge', event)" class="filter-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 font-mono text-xs transition-all">Edge & Cloud</button>
+                <button onclick="filterMethods('audio', event)" class="filter-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 font-mono text-xs transition-all">Audio & Media</button>
+                <button onclick="filterMethods('hardware', event)" class="filter-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 font-mono text-xs transition-all">Hardware & Systems</button>
             </div>
 
             <!-- Methods Grid -->
@@ -596,7 +596,9 @@
         });
 
         // Filter Logic
-        function filterMethods(category) {
+        function filterMethods(category, e) {
+            const evt = e || window.event;
+            const targetBtn = evt ? (evt.currentTarget || evt.target.closest('.filter-btn')) : null;
             const cards = document.querySelectorAll('.method-card');
             const buttons = document.querySelectorAll('.filter-btn');
 
@@ -605,8 +607,10 @@
                 btn.classList.add('bg-white/5', 'text-neutral-300');
             });
 
-            event.target.classList.add('bg-amber-500', 'text-black', 'font-bold');
-            event.target.classList.remove('bg-white/5', 'text-neutral-300');
+            if (targetBtn) {
+                targetBtn.classList.add('bg-amber-500', 'text-black', 'font-bold');
+                targetBtn.classList.remove('bg-white/5', 'text-neutral-300');
+            }
 
             cards.forEach(card => {
                 if (category === 'all' || card.dataset.category === category) {

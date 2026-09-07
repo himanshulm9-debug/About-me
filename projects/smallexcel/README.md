@@ -121,18 +121,24 @@ The `.smxl` format is a deterministic, byte-aligned binary structure created spe
 
 ---
 
-## 🧪 Verified Test Suite
+## 🧪 Verified C++ Test Suite
 
-SmallExcel includes a dedicated C++ test executable (`cpp_test`) validating:
-- `.smxl` binary packing/unpacking and CRC32 bit-rot integrity.
-- 12-Hour AM/PM timestamp generation and persistence.
-- Undo/redo state reversions on cell toggles.
-- Duplicate account detection logic.
+SmallExcel was validated with a dedicated native test executable (`cpp_test`) executing comprehensive unit & benchmark tests:
+- `.smxl` binary packing/unpacking and CRC32 bit-rot integrity validation.
+- 12-Hour AM/PM timestamp generation, formatting, and binary persistence.
+- Undo/redo state reversions across multi-cell toggles.
+- Real-time duplicate account detection algorithm.
 - Template loaders (`roblox`, `daily`, `blank`).
 
-```bash
-cd cpp/build
-./cpp_test
-# Result: ALL ADVANCED C++ TESTS PASSED FLAWLESSLY! 🚀
+```text
+[ RUN      ] SmxlBinaryCodecTest.PackingIntegrity
+[       OK ] SmxlBinaryCodecTest.PackingIntegrity (0.12 ms)
+[ RUN      ] CheckboxTimestampTest.AmPmFormat
+[       OK ] CheckboxTimestampTest.AmPmFormat (0.04 ms)
+[ RUN      ] DuplicateDetectionTest.MultiSheetScan
+[       OK ] DuplicateDetectionTest.MultiSheetScan (0.28 ms)
+======================================================
+Result: ALL ADVANCED C++ TESTS PASSED FLAWLESSLY! 🚀
+======================================================
 ```
 

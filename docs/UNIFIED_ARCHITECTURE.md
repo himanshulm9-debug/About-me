@@ -98,7 +98,7 @@ The platform combines three independent Vercel projects into one unified interfa
   "rewrites": [
     {
       "source": "/apps/seo/:path*",
-      "destination": "https://se978.vercel.app/:path*"
+      "destination": "https://seo978.vercel.app/:path*"
     },
     {
       "source": "/apps/crypto/:path*",

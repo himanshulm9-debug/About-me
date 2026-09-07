@@ -220,17 +220,17 @@ Each subfolder contains full, standalone documentation with setup instructions, 
 
 ## 🚀 1-Command Multi-Repo Sync Tool (`push-all.sh`)
 
-Instead of manually navigating into 5 separate folders to commit and push changes, you can manage the entire ecosystem with a single command from the root directory:
+Instead of manually navigating into separate directories to commit, slice subtrees, and push changes, you can manage the entire 6-repository ecosystem with a single command from the monorepo root:
 
 ```bash
-# Check git status across all 5 repositories
+# Check git status across all repositories
 ./push-all.sh status
 
-# Automatically stage, commit, and push changes across all 5 repos
+# Automatically stage, commit, and push main monorepo & About-me
 ./push-all.sh "feat: sync updates across portfolio ecosystem"
 
-# Create missing repos on GitHub via GitHub CLI
-./push-all.sh create
+# Full ecosystem sync: pushes monorepo, About-me, and all 4 standalone subtrees to GitHub
+./push-all.sh --all
 ```
 
 ### GitHub CLI One-Time Authentication:

@@ -136,10 +136,3 @@ cd cpp/build
 # Result: ALL ADVANCED C++ TESTS PASSED FLAWLESSLY! 🚀
 ```
 
----
-
-## 📂 Project Structure & Artifacts
-- **Executable**: `SmallExcel` (Standalone C++20 / Qt6 316 KB binary)
-- **Desktop Entry**: `smallexcel.desktop`
-- **Source Code**: `cpp/`
-- **Architecture Spec**: `SMXL_FORMAT_RATIONALE.md`

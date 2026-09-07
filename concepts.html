@@ -232,25 +232,112 @@
                 </article>
 
                 <!-- Method 2 -->
-                <article class="method-card p-8 rounded-3xl glass-card space-y-4" data-category="auth">
+                <article class="method-card p-8 rounded-3xl glass-card space-y-5 lg:col-span-2" data-category="auth">
                     <div class="flex items-center justify-between">
-                        <span class="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-mono text-xs font-semibold">METHOD 02</span>
-                        <span class="text-xs font-mono text-neutral-500">Identity Architecture</span>
+                        <span class="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-mono text-xs font-semibold">METHOD 02 • CORE INNOVATION</span>
+                        <span class="text-xs font-mono text-neutral-500">Identity Architecture & Data Unification</span>
                     </div>
-                    <h2 class="text-2xl font-display font-bold text-white">Guest Device UID & Account Unification</h2>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-2xl sm:text-3xl font-display font-bold text-white">Guest Device UID & Automated Account Unification</h2>
+                            <p class="text-xs font-mono text-cyan-300 mt-1">Philosophy: "Guest and Google Data Become One" • Zero Lost History</p>
+                        </div>
+                        <span class="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-neutral-300 text-xs font-mono shrink-0">
+                            Algorithmic State Migration
+                        </span>
+                    </div>
                     <p class="text-sm text-neutral-400 leading-relaxed">
-                        Solves the anonymous visitor data loss problem. Visitors receive a permanent device fingerprint (`guest_xxx`) stored in `localStorage`. When the user later signs in with Google, all audits, NLP entities, and quotas are seamlessly merged into their Google account and synchronized with the Fastify backend: <em>"Guest and Google data become one"</em>.
+                        Solves the anonymous visitor friction and data loss problem. Visitors receive a cryptographically random browser fingerprint (<code class="text-amber-300">guest_&lt;rand&gt;_&lt;timestamp&gt;</code>) stored permanently in <code class="text-white font-mono">localStorage</code>. Scans, document extractions, and cooldowns are fully tracked under this device partition. The instant the user signs in with Google, <code class="text-white font-mono">mergeGuestHistoryToUser()</code> automatically migrates and deduplicates all local records into their Google UID, while notifying the backend via <code class="text-white font-mono">previousGuestId</code> to unify server audit trails.
                     </p>
+
+                    <!-- Unification Lifecycle Diagram -->
+                    <div class="p-4 rounded-2xl bg-black/40 border border-cyan-500/20 space-y-2">
+                        <div class="text-xs font-mono text-cyan-400 font-semibold uppercase tracking-wider">Unification Lifecycle Flowchart</div>
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-center text-xs font-mono pt-2">
+                            <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+                                <div class="text-neutral-400 text-[10px]">STAGE 1</div>
+                                <div class="text-white font-bold mt-1">Anonymous Visit</div>
+                                <div class="text-[10px] text-neutral-500 mt-1">Generate device UID in localStorage</div>
+                            </div>
+                            <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+                                <div class="text-neutral-400 text-[10px]">STAGE 2</div>
+                                <div class="text-white font-bold mt-1">Guest Audits</div>
+                                <div class="text-[10px] text-neutral-500 mt-1">Scans saved under guest_UID partition</div>
+                            </div>
+                            <div class="p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/30">
+                                <div class="text-cyan-400 text-[10px]">STAGE 3</div>
+                                <div class="text-cyan-300 font-bold mt-1">Google Sign-In</div>
+                                <div class="text-[10px] text-neutral-400 mt-1">OAuth returns permanent Google UID</div>
+                            </div>
+                            <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
+                                <div class="text-emerald-400 text-[10px]">STAGE 4</div>
+                                <div class="text-emerald-300 font-bold mt-1">Unified State</div>
+                                <div class="text-[10px] text-neutral-400 mt-1">Local & backend data merged into one</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Storage Partition Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs font-mono border-collapse">
+                            <thead>
+                                <tr class="border-b border-white/10 text-neutral-400">
+                                    <th class="py-2 pr-4 font-semibold">Diagnostic Tool</th>
+                                    <th class="py-2 pr-4 font-semibold">Guest Storage Key</th>
+                                    <th class="py-2 pr-4 font-semibold">Unified Google Storage Key</th>
+                                    <th class="py-2 font-semibold">Deduplication Strategy</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/5 text-neutral-300">
+                                <tr>
+                                    <td class="py-2 pr-4 text-white font-medium">Live DOM Crawler</td>
+                                    <td class="py-2 pr-4 text-neutral-400">seo_scan_history_guest_xxx</td>
+                                    <td class="py-2 pr-4 text-cyan-300">seo_scan_history_${googleUser.uid}</td>
+                                    <td class="py-2 text-neutral-400">Composite (URL + timestamp)</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 pr-4 text-white font-medium">Binary NLP Uploads</td>
+                                    <td class="py-2 pr-4 text-neutral-400">seo_nlp_history_guest_xxx</td>
+                                    <td class="py-2 pr-4 text-cyan-300">seo_nlp_history_${googleUser.uid}</td>
+                                    <td class="py-2 text-neutral-400">File hash & name deduplication</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 pr-4 text-white font-medium">Broken Links Inspector</td>
+                                    <td class="py-2 pr-4 text-neutral-400">seo_history_links_guest_xxx</td>
+                                    <td class="py-2 pr-4 text-cyan-300">seo_history_links_${googleUser.uid}</td>
+                                    <td class="py-2 text-neutral-400">Target domain deduplication</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 pr-4 text-white font-medium">Competitor Gap Matrix</td>
+                                    <td class="py-2 pr-4 text-neutral-400">seo_history_gap_guest_xxx</td>
+                                    <td class="py-2 pr-4 text-cyan-300">seo_history_gap_${googleUser.uid}</td>
+                                    <td class="py-2 text-neutral-400">Domain pair composite key</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 pr-4 text-white font-medium">Bot & Sitemap Dispatches</td>
+                                    <td class="py-2 pr-4 text-neutral-400">seo_history_bot_guest_xxx</td>
+                                    <td class="py-2 pr-4 text-cyan-300">seo_history_bot_${googleUser.uid}</td>
+                                    <td class="py-2 text-neutral-400">Sitemap URL & dispatch time</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Code Snippet -->
                     <div class="code-block p-4 rounded-2xl text-xs text-neutral-300 space-y-1 overflow-x-auto">
-                        <div class="text-neutral-500">// Automated Unification on Google Sign-In</div>
+                        <div class="text-neutral-500">// 1. Client-side merge: Reconcile guest history array into permanent Google account</div>
                         <div>mergeGuestHistoryToUser(guestId, googleUser.uid);</div>
-                        <div>await fetch('/api/telemetry/sync', {</div>
-                        <div>  body: JSON.stringify({ userId: googleUser.uid, previousGuestId: guestId })</div>
+                        <div class="text-neutral-500 mt-2">// 2. Backend sync: Tell Fastify backend to re-key guest telemetry and scans under user email</div>
+                        <div>await fetch(`${BACKEND_URL}/api/telemetry/sync`, {</div>
+                        <div>  method: 'POST',</div>
+                        <div>  headers: { 'Content-Type': 'application/json' },</div>
+                        <div>  body: JSON.stringify({ userId: googleUser.uid, previousGuestId: guestId, email: googleUser.email })</div>
                         <div>});</div>
+                        <div class="text-emerald-400 mt-1">// Result: User retains 100% of guest data with zero lost progress!</div>
                     </div>
                     <div class="flex items-center gap-2 pt-2 text-xs font-mono text-neutral-400">
                         <i data-lucide="check" class="w-4 h-4 text-cyan-400"></i>
-                        <span>Active on: <strong class="text-white">seo978.vercel.app</strong></span>
+                        <span>Implemented in: <strong class="text-white">apps/seo978/src/utils/guestId.ts & apps/backend/src/services/store.ts</strong></span>
                     </div>
                 </article>
 

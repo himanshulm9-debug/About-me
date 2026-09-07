@@ -410,6 +410,14 @@ himanshu-bio-combined/
 2. Set up `render.yaml` with Docker / Node runtime configuration.
 3. Validate Firebase Firestore security rules for Google user profiles and audit projects.
 
+### Phase 6: Core Engineering Methods & Production Paradigms
+1. **Zero-Backend Website Cloner**: 100% client-side DOM recursive crawler and in-browser streaming ZIP packager via `JSZip` and `Blob` APIs (0 MB server load).
+2. **Persistent Guest UID & Account Unification**: Browser fingerprinting with automated unification migrating all guest audits and telemetry into the Google account upon login (*"Guest and Google data become one"*).
+3. **Multi-Zone Decoupled Promotion**: Dynamic host detection (`window.location.hostname`) injecting author promotion badges on standalone URLs (`crypto978.vercel.app`, `seo978.vercel.app`).
+4. **Dynamic Web Audio API Engine**: Real-time harmonic synthesizer (`OscillatorNode` + `BiquadFilterNode`), dynamic search query music streaming, and tactile hover micro-audio feedback.
+5. **Zero-Trust Clearance & Admin Quota Governance**: Firebase Auth with `browserLocalPersistence`, Google OAuth with `select_account`, Super Admin auto-elevation for `himanshulm9@gmail.com`, and live admin quota sliders syncing with Fastify backend.
+6. **Route-Aware Dock & Security Hardening**: Contextual dock suppression on `/admin`, restricted `#contact` anchoring to `/`, and complete elimination of passkey leaks from DOM placeholders.
+
 ---
 
 <div align="center">

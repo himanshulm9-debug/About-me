@@ -23,8 +23,31 @@
 | **Main Bio Hub** | [himanshu-bio.vercel.app](https://himanshu-bio.vercel.app) | [himanshulm9-debug/himanshu-bio-ui](https://github.com/himanshulm9-debug/himanshu-bio-ui) | [Bio Hub Docs](./projects/bio-hub/README.md) | Next.js 16, 3D WebGL Canvas, Bento Grid, Resume Studio |
 | **SEO-INDEXING** | [seo978.vercel.app](https://seo978.vercel.app) | [himanshulm9-debug/seo978](https://github.com/himanshulm9-debug/seo978) | [SEO Suite Docs](./projects/se978/README.md) | Technical SEO Crawler, Google Login Gatekeeper, PDF NLP Extractor |
 | **CryptoPro** | [crypto978.vercel.app](https://crypto978.vercel.app) | [himanshulm9-debug/crypto-visualizer](https://github.com/himanshulm9-debug/crypto-visualizer) | [Crypto Docs](./projects/crypto-visualizer/README.md) | Live Candlestick Charts, Binance/CoinGecko Feeds, Pair Search |
+| **Website Cloner Studio** | [himanshu-bio.vercel.app/apps/cloner](https://himanshu-bio.vercel.app/apps/cloner) | [himanshulm9-debug/himanshu-bio-ui](https://github.com/himanshulm9-debug/himanshu-bio-ui) | [Methods Spec](./docs/ENGINEERING_METHODS_AND_CONCEPTS.md#01-zero-backend-in-browser-website-cloner-architecture) | Zero-Backend Client-Side DOM & Streaming In-Browser ZIP Bundler |
+| **Admin Command Center** | [himanshu-bio.vercel.app/admin](https://himanshu-bio.vercel.app/admin) | [himanshulm9-debug/himanshu-bio-ui](https://github.com/himanshulm9-debug/himanshu-bio-ui) | [Methods Spec](./docs/ENGINEERING_METHODS_AND_CONCEPTS.md#07-live-admin-quota-slider--telemetry-synchronization) | Level 5 Zero-Trust Admin Dashboard, User Quota Sliders, Telemetry |
 | **Backend API Engine** | `Render.com Web Service` | [himanshulm9-debug/himanshu-bio-server](https://github.com/himanshulm9-debug/himanshu-bio-server) | [Backend Docs](./projects/backend-server/README.md) | Fastify (~75k req/sec), Telegram Cloud Storage Tunnel, Rate Limiting |
 | **YouTube & Gemini Suite** | *Decoupled Service* | [himanshulm9-debug/himanshu-dev](https://github.com/himanshulm9-debug/himanshu-dev) | [AI & Media Docs](./projects/himanshu-dev/README.md) | Persistent Audio Player & Google Gemini AI Conversational Assistant |
+
+---
+
+## 🧠 Core Engineering Methods & Architectural Concepts
+
+> Full Technical Specification: [**`docs/ENGINEERING_METHODS_AND_CONCEPTS.md`**](./docs/ENGINEERING_METHODS_AND_CONCEPTS.md)  
+> Interactive Visual Showcase: [**`concepts.html`**](./concepts.html)
+
+A structured inventory of foundational software paradigms and methods engineered across this platform:
+
+1. **Zero-Backend In-Browser Website Cloner**: Offloads 100% of DOM recursive parsing, asset discovery, and ZIP bundling to the client browser via `JSZip` and `Blob` streams — ensuring **0 MB permanent server RAM/disk load** even for 1 GB+ websites.
+2. **Persistent Guest Device UID & Account Unification**: Anonymous visitors receive a permanent browser UID (`guest_xxx`). Upon Google OAuth login, all local audits, document entities, and quotas automatically merge into their permanent Google identity (*"Guest and Google data become one"*).
+3. **Multi-Zone Edge Rewrites & Host-Aware Promotion**: Invisible edge routing on Vercel (`/apps/seo`, `/apps/crypto`) coupled with runtime host detection (`window.location.hostname`) to automatically inject author attribution badges on standalone project URLs.
+4. **Dynamic Web Audio API Engine & Music Discovery**: High-performance audio synthesizer leveraging `OscillatorNode` and `BiquadFilterNode` for ambient focus chords, paired with dynamic search query discovery and tactile hover micro-audio feedback.
+5. **Zero-Trust Clearance Hierarchy & Super Admin Elevation**: Firebase Auth with `browserLocalPersistence`, Google OAuth with account switching (`select_account`), and auto-elevation of `himanshulm9@gmail.com` to Level 5 Super Admin (`⚡ UNLIMITED` clearance, 0s cooldown).
+6. **Per-User Isolated Telemetry Partitions**: Strict multi-tenant isolation across all 5 SEO diagnostic suites using account-keyed local storage partitions (`seo_scan_history_${userId}`).
+7. **Live Admin Quota Slider & Telemetry Sync**: Interactive slider in the Admin Command Center dynamically adjusts daily user limits (0 to 200+ scans) and toggles account status, syncing in real-time with the Fastify backend.
+8. **Ephemeral Telegram Cloud Storage Tunneling**: Ingests files ephemerally in RAM, tunnels them to a private Telegram channel via `bot.sendDocument()`, and immediately unlinks local temp storage for infinite, free cloud document archival with **0 MB server disk usage**.
+9. **Security Hardening & Zero Passkey Leakage**: Enforced masked inputs (`type="password"`), removed all authorization hints from HTML placeholders, and decoupled public social handles from clearance tokens.
+10. **Route-Aware Floating Navigation Dock**: Uses `usePathname()` to automatically suppress the consumer dock on `/admin` and restricts `#contact` strictly to the homepage (`/`) where the anchor section resides.
+11. **1-Command Multi-Repository Git Subtree Orchestration**: Automated multi-remote dispatch (`./push-all.sh --all`) that stages, slices subtrees, and updates 6 independent GitHub repositories in a single terminal command.
 
 ---
 

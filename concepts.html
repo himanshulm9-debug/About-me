@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Master Engineering Methods & Architectural Concepts - Himanshu Developer Ecosystem.">
+    <title>Engineering Methods & System Concepts | Himanshu</title>
+
+    <meta property="og:image" content="https://himanshu-bio.vercel.app/portfolio-preview.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://himanshu-bio.vercel.app/portfolio-preview.jpg" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        bg: '#020617',
+                        accent: '#f59e0b',
+                        cyan: '#06b6d4',
+                        emerald: '#10b981',
+                        purple: '#a855f7',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --cursor-size: 20px;
+        }
+
+        body {
+            background-color: #020617;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            body {
+                cursor: none;
+            }
+
+            #cursor-dot,
+            #cursor-outline {
+                display: block;
+            }
+        }
+
+        @media (hover: none) {
+            #cursor-dot,
+            #cursor-outline {
+                display: none;
+            }
+        }
+
+        #cursor-dot {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background-color: #f59e0b;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.2s, transform 0.1s;
+        }
+
+        #cursor-outline {
+            position: fixed;
+            width: 36px;
+            height: 36px;
+            border: 1.5px solid rgba(245, 158, 11, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, border-color 0.2s;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(245, 158, 11, 0.35);
+            box-shadow: 0 20px 40px -15px rgba(245, 158, 11, 0.12);
+        }
+
+        .code-block {
+            background: rgba(2, 6, 23, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-family: 'JetBrains Mono', monospace;
+        }
+    </style>
+</head>
+
+<body class="selection:bg-amber-500/30 selection:text-amber-200">
+    <!-- Custom Cursor Elements -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-outline"></div>
+
+    <!-- 3D Canvas Background -->
+    <div id="canvas-container" class="fixed inset-0 z-0 pointer-events-none opacity-40"></div>
+
+    <div class="relative z-10 flex flex-col min-h-screen">
+        <!-- Top Navigation -->
+        <nav class="sticky top-0 z-50 backdrop-blur-xl bg-slate-950/80 border-b border-white/10 px-6 py-4">
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                <a href="index.html" class="flex items-center gap-2.5 text-neutral-300 hover:text-white transition-colors group">
+                    <i data-lucide="arrow-left" class="w-4 h-4 text-amber-400 group-hover:-translate-x-1 transition-transform"></i>
+                    <span class="font-mono text-sm">Back to Executive Showcase</span>
+                </a>
+
+                <div class="flex items-center gap-3">
+                    <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono">
+                        <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
+                        11 Core Architectural Methods
+                    </span>
+                    <a href="https://github.com/himanshulm9-debug/About-me/blob/main/docs/ENGINEERING_METHODS_AND_CONCEPTS.md"
+                       target="_blank"
+                       class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-semibold text-xs transition-all shadow-lg shadow-amber-500/20 flex items-center gap-2">
+                        <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+                        <span>Raw Markdown Spec</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Header -->
+        <header class="max-w-7xl mx-auto px-6 pt-16 pb-12 text-center">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-neutral-300 mb-6">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span>System Engineering & Architecture Vault</span>
+            </div>
+            <h1 class="text-4xl sm:text-6xl font-display font-extrabold text-white tracking-tight mb-6">
+                Engineering <span class="bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-500 bg-clip-text text-transparent">Methods & Concepts</span>
+            </h1>
+            <p class="max-w-3xl mx-auto text-base sm:text-lg text-neutral-400 font-light leading-relaxed">
+                A first-principles breakdown of every architectural method, protocol, and algorithmic strategy engineered across the unified platform. From <strong class="text-white">zero-backend in-browser cloner pipelines</strong> to <strong class="text-white">guest-to-user account unification</strong> and <strong class="text-white">ephemeral cloud tunneling</strong>.
+            </p>
+
+            <!-- Quick Metrics Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12 max-w-4xl mx-auto text-left">
+                <div class="p-4 rounded-2xl glass-card">
+                    <div class="text-xs font-mono text-neutral-400 mb-1">Permanent Disk Usage</div>
+                    <div class="text-2xl font-display font-bold text-emerald-400">0 MB</div>
+                    <div class="text-[11px] text-neutral-500 mt-1">Client & Telegram streams</div>
+                </div>
+                <div class="p-4 rounded-2xl glass-card">
+                    <div class="text-xs font-mono text-neutral-400 mb-1">Backend Throughput</div>
+                    <div class="text-2xl font-display font-bold text-cyan-400">~75k req/s</div>
+                    <div class="text-[11px] text-neutral-500 mt-1">Fastify schema serialization</div>
+                </div>
+                <div class="p-4 rounded-2xl glass-card">
+                    <div class="text-xs font-mono text-neutral-400 mb-1">Edge Proxy Latency</div>
+                    <div class="text-2xl font-display font-bold text-amber-400">&lt;50ms</div>
+                    <div class="text-[11px] text-neutral-500 mt-1">Vercel Multi-Zone Edge</div>
+                </div>
+                <div class="p-4 rounded-2xl glass-card">
+                    <div class="text-xs font-mono text-neutral-400 mb-1">Identity Security</div>
+                    <div class="text-2xl font-display font-bold text-purple-400">Zero-Trust</div>
+                    <div class="text-[11px] text-neutral-500 mt-1">Google OAuth + Passkey Guard</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="max-w-7xl mx-auto px-6 pb-24 space-y-12">
+            <!-- Filter Bar -->
+            <div class="flex items-center justify-center flex-wrap gap-2 pt-4">
+                <button onclick="filterMethods('all')" class="filter-btn px-4 py-2 rounded-xl bg-amber-500 text-black font-mono text-xs font-bold transition-all">All Concepts</button>
+                <button onclick="filterMethods('client')" class="filter-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 font-mono text-xs transition-all">Client & Browser</button>
+                <button onclick="filterMethods('auth')" class="filter-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 font-mono text-xs transition-all">Identity & Security</button>
+                <button onclick="filterMethods('edge')" class="filter-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 font-mono text-xs transition-all">Edge & Cloud</button>
+                <button onclick="filterMethods('audio')" class="filter-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 font-mono text-xs transition-all">Audio & Media</button>
+            </div>
+
+            <!-- Methods Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Method 1 -->
+                <article class="method-card p-8 rounded-3xl glass-card space-y-4" data-category="client">
+                    <div class="flex items-center justify-between">
+                        <span class="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-xs font-semibold">METHOD 01</span>
+                        <span class="text-xs font-mono text-neutral-500">Client Engine</span>
+                    </div>
+                    <h2 class="text-2xl font-display font-bold text-white">Zero-Backend In-Browser Website Cloner</h2>
+                    <p class="text-sm text-neutral-400 leading-relaxed">
+                        Traditional web cloners process asset downloads and ZIP generation on the backend, creating extreme CPU, RAM, and bandwidth bottlenecks for 500 MB – 1 GB websites. This method executes the entire pipeline in the user's browser using in-memory streaming ZIP bundling (`JSZip`), Blob generation, and direct browser download.
+                    </p>
+                    <div class="code-block p-4 rounded-2xl text-xs text-neutral-300 space-y-1 overflow-x-auto">
+                        <div class="text-neutral-500">// 100% In-Browser ZIP Bundling (0 MB Server Load)</div>
+                        <div>const zip = new JSZip();</div>
+                        <div>const blob = await zip.generateAsync({ type: 'blob' });</div>
+                        <div>const downloadUrl = URL.createObjectURL(blob);</div>
+                        <div class="text-emerald-400">// Direct browser save with zero backend disk usage</div>
+                    </div>
+                    <div class="flex items-center gap-2 pt-2 text-xs font-mono text-neutral-400">
+                        <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>
+                        <span>Active on: <strong class="text-white">himanshu-bio.vercel.app/apps/cloner</strong></span>
+                    </div>
+                </article>
+
+                <!-- Method 2 -->
+                <article class="method-card p-8 rounded-3xl glass-card space-y-4" data-category="auth">
+                    <div class="flex items-center justify-between">
+                        <span class="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-mono text-xs font-semibold">METHOD 02</span>
+                        <span class="text-xs font-mono text-neutral-500">Identity Architecture</span>
+                    </div>
+                    <h2 class="text-2xl font-display font-bold text-white">Guest Device UID & Account Unification</h2>
+                    <p class="text-sm text-neutral-400 leading-relaxed">
+                        Solves the anonymous visitor data loss problem. Visitors receive a permanent device fingerprint (`guest_xxx`) stored in `localStorage`. When the user later signs in with Google, all audits, NLP entities, and quotas are seamlessly merged into their Google account and synchronized with the Fastify backend: <em>"Guest and Google data become one"</em>.
+                    </p>
+                    <div class="code-block p-4 rounded-2xl text-xs text-neutral-300 space-y-1 overflow-x-auto">
+                        <div class="text-neutral-500">// Automated Unification on Google Sign-In</div>
+                        <div>mergeGuestHistoryToUser(guestId, googleUser.uid);</div>
+                        <div>await fetch('/api/telemetry/sync', {</div>
+                        <div>  body: JSON.stringify({ userId: googleUser.uid, previousGuestId: guestId })</div>
+                        <div>});</div>
+                    </div>
+                    <div class="flex items-center gap-2 pt-2 text-xs font-mono text-neutral-400">
+                        <i data-lucide="check" class="w-4 h-4 text-cyan-400"></i>
+                        <span>Active on: <strong class="text-white">seo978.vercel.app</strong></span>
+                    </div>
+                </article>
+
+                <!-- Method 3 -->
+                <article class="method-card p-8 rounded-3xl glass-card space-y-4" data-category="edge">
+                    <div class="flex items-center justify-between">
+                        <span class="px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-xs font-semibold">METHOD 03</span>
+                        <span class="text-xs font-mono text-neutral-500">Routing & Attribution</span>
+                    </div>
+                    <h2 class="text-2xl font-display font-bold text-white">Multi-Zone Edge Rewrites & Decoupled Promotion</h2>
+                    <p class="text-sm text-neutral-400 leading-relaxed">
+                        Sub-applications are deployed on independent Vercel projects (`seo978.vercel.app`, `crypto978.vercel.app`) but stream seamlessly into the main bio website via Vercel Edge Rewrites (`/apps/seo`, `/apps/crypto`). Client code dynamically detects whether it is running standalone or embedded, rendering author attribution pills on standalone domains.
+                    </p>
+                    <div class="code-block p-4 rounded-2xl text-xs text-neutral-300 space-y-1 overflow-x-auto">
+                        <div class="text-neutral-500">// Standalone Domain Promotion Detection</div>
+                        <div>const isStandalone = window.location.hostname === 'crypto978.vercel.app';</div>
+                        <div>if (isStandalone) {</div>
+                        <div>  renderAuthorBadge("Built by Himanshu • Systems Architect ↗");</div>
+                        <div>}</div>
+                    </div>
+                    <div class="flex items-center gap-2 pt-2 text-xs font-mono text-neutral-400">
+                        <i data-lucide="check" class="w-4 h-4 text-amber-400"></i>
+                        <span>Active on: <strong class="text-white">crypto978.vercel.app & seo978.vercel.app</strong></span>
+                    </div>
+                </article>
+
+                <!-- Method 4 -->
+                <article class="method-card p-8 rounded-3xl glass-card space-y-4" data-category="audio">
+                    <div class="flex items-center justify-between">
+                        <span class="px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 font-mono text-xs font-semibold">METHOD 04</span>
+                        <span class="text-xs font-mono text-neutral-500">Audio Engine</span>
+                    </div>
+                    <h2 class="text-2xl font-display font-bold text-white">Dynamic Web Audio API Engine & Music Streamer</h2>
+                    <p class="text-sm text-neutral-400 leading-relaxed">
+                        Replaces static hardcoded music files and heavy third-party iframe embeds with a native browser Web Audio engine. Employs `OscillatorNode` with low-pass `BiquadFilterNode` filtering to synthesize real-time ambient soundtrack chords, paired with dynamic search query discovery, animated visualizers, and tactile hover micro-audio feedback.
+                    </p>
+                    <div class="code-block p-4 rounded-2xl text-xs text-neutral-300 space-y-1 overflow-x-auto">
+                        <div class="text-neutral-500">// Real-time Web Audio API Harmonic Synthesis</div>
+                        <div>const osc = audioCtx.createOscillator();</div>
+                        <div>const filter = audioCtx.createBiquadFilter();</div>
+                        <div>filter.type = 'lowpass'; filter.frequency.value = 440;</div>
+                        <div>osc.connect(filter).connect(audioCtx.destination);</div>
+                    </div>
+                    <div class="flex items-center gap-2 pt-2 text-xs font-mono text-neutral-400">
+                        <i data-lucide="check" class="w-4 h-4 text-purple-400"></i>
+                        <span>Active on: <strong class="text-white">himanshu-bio.vercel.app (MusicPlayer)</strong></span>
+                    </div>
+                </article>
+
+                <!-- Method 5 -->
+                <article class="method-card p-8 rounded-3xl glass-card space-y-4" data-category="auth">
+                    <div class="flex items-center justify-between">
+                        <span class="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-mono text-xs font-semibold">METHOD 05</span>
+                        <span class="text-xs font-mono text-neutral-500">Access Control</span>
+                    </div>
+                    <h2 class="text-2xl font-display font-bold text-white">Zero-Trust Clearance & Super Admin Elevation</h2>
+                    <p class="text-sm text-neutral-400 leading-relaxed">
+                        Hierarchical clearance system combining Google OAuth2 (`browserLocalPersistence`) and emergency master passkeys. Authenticated users receive customizable scan quotas, while `himanshulm9@gmail.com` is automatically elevated to Level 5 Super Admin with unlimited scans, zero cooldowns, and full administrative command privileges.
+                    </p>
+                    <div class="code-block p-4 rounded-2xl text-xs text-neutral-300 space-y-1 overflow-x-auto">
+                        <div class="text-neutral-500">// Owner Automatic Elevation Protocol</div>
+                        <div>if (user.email === 'himanshulm9@gmail.com') {</div>
+                        <div>  setClearance('UNLIMITED');</div>
+                        <div>  setCooldown(0);</div>
+                        <div>}</div>
+                    </div>
+                    <div class="flex items-center gap-2 pt-2 text-xs font-mono text-neutral-400">
+                        <i data-lucide="check" class="w-4 h-4 text-cyan-400"></i>
+                        <span>Active on: <strong class="text-white">seo978.vercel.app & himanshu-bio.vercel.app/admin</strong></span>
+                    </div>
+                </article>
+
+                <!-- Method 6 -->
+                <article class="method-card p-8 rounded-3xl glass-card space-y-4" data-category="client">
+                    <div class="flex items-center justify-between">
+                        <span class="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-xs font-semibold">METHOD 06</span>
+                        <span class="text-xs font-mono text-neutral-500">Data Isolation</span>
+                    </div>
+                    <h2 class="text-2xl font-display font-bold text-white">Per-User Isolated Telemetry & Audit Partitions</h2>
+                    <p class="text-sm text-neutral-400 leading-relaxed">
+                        Ensures multi-tenant audit privacy across all 5 diagnostic tabs (Crawler, NLP, Links, Gap, Indexer). History is stored strictly under user-specific storage keys (`seo_scan_history_${userId}`). Switching accounts or signing out instantly unmounts and isolates the audit logs, guaranteeing zero data cross-contamination.
+                    </p>
+                    <div class="code-block p-4 rounded-2xl text-xs text-neutral-300 space-y-1 overflow-x-auto">
+                        <div class="text-neutral-500">// Partitioned Storage per Account</div>
+                        <div>const userStorageKey = `seo_scan_history_${currentUser.uid}`;</div>
+                        <div>const audits = JSON.parse(localStorage.getItem(userStorageKey) || '[]');</div>
+                    </div>
+                    <div class="flex items-center gap-2 pt-2 text-xs font-mono text-neutral-400">
+                        <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>
+                        <span>Active on: <strong class="text-white">All 5 Tabs in seo978</strong></span>
+                    </div>
+                </article>
+
+                <!-- Method 7 -->
+                <article class="method-card p-8 rounded-3xl glass-card space-y-4" data-category="edge">
+                    <div class="flex items-center justify-between">
+                        <span class="px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-xs font-semibold">METHOD 07</span>
+                        <span class="text-xs font-mono text-neutral-500">Governance</span>
+                    </div>
+                    <h2 class="text-2xl font-display font-bold text-white">Live Admin Quota Slider & Telemetry Sync</h2>
+                    <p class="text-sm text-neutral-400 leading-relaxed">
+                        Remote governance engine within the Admin Command Center. The Super Admin dials any user's daily quota limit (0–200+ scans/day) or toggles their account status (active/blocked) via an interactive slider. Synchronizes with the Fastify backend via optimistic UI and dynamically reflects on the user's browser in real time.
+                    </p>
+                    <div class="code-block p-4 rounded-2xl text-xs text-neutral-300 space-y-1 overflow-x-auto">
+                        <div class="text-neutral-500">// Admin Quota Slider Synchronization</div>
+                        <div>await fetch(`${apiUrl}/api/admin/users/${userId}`, {</div>
+                        <div>  method: 'PATCH',</div>
+                        <div>  body: JSON.stringify({ customDailyLimit: newLimit })</div>
+                        <div>});</div>
+                    </div>
+                    <div class="flex items-center gap-2 pt-2 text-xs font-mono text-neutral-400">
+                        <i data-lucide="check" class="w-4 h-4 text-amber-400"></i>
+                        <span>Active on: <strong class="text-white">himanshu-bio.vercel.app/admin</strong></span>
+                    </div>
+                </article>
+
+                <!-- Method 8 -->
+                <article class="method-card p-8 rounded-3xl glass-card space-y-4" data-category="edge">
+                    <div class="flex items-center justify-between">
+                        <span class="px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-xs font-semibold">METHOD 08</span>
+                        <span class="text-xs font-mono text-neutral-500">Cloud Storage</span>
+                    </div>
+                    <h2 class="text-2xl font-display font-bold text-white">Ephemeral Telegram Cloud Storage Tunneling</h2>
+                    <p class="text-sm text-neutral-400 leading-relaxed">
+                        Uploaded documents (PDFs, resumes, text) are processed ephemerally on Render.com in temporary RAM. Files are asynchronously tunneled to a private Telegram channel via the Telegram Bot API (`bot.sendDocument()`) for infinite, 100% free cloud storage, followed by immediate local purging (`fs.unlinkSync()`). Guarantees 0 MB permanent disk bloat.
+                    </p>
+                    <div class="code-block p-4 rounded-2xl text-xs text-neutral-300 space-y-1 overflow-x-auto">
+                        <div class="text-neutral-500">// Telegram Ephemeral File Forwarding</div>
+                        <div>await telegramBot.sendDocument(CHANNEL_ID, fileStream);</div>
+                        <div>fs.unlinkSync(tempFilePath); // 0 MB permanent disk</div>
+                    </div>
+                    <div class="flex items-center gap-2 pt-2 text-xs font-mono text-neutral-400">
+                        <i data-lucide="check" class="w-4 h-4 text-amber-400"></i>
+                        <span>Active on: <strong class="text-white">Fastify API (Render.com)</strong></span>
+                    </div>
+                </article>
+
+                <!-- Method 9 -->
+                <article class="method-card p-8 rounded-3xl glass-card space-y-4" data-category="auth">
+                    <div class="flex items-center justify-between">
+                        <span class="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-mono text-xs font-semibold">METHOD 09</span>
+                        <span class="text-xs font-mono text-neutral-500">Security Engineering</span>
+                    </div>
+                    <h2 class="text-2xl font-display font-bold text-white">Security Hardening & Zero Passkey Leakage</h2>
+                    <p class="text-sm text-neutral-400 leading-relaxed">
+                        Complete elimination of credential hints and passkeys from input placeholders and client-side strings. Inputs enforce `type="password"`, decoupling public social handles (e.g., `@himanshu978`) from authorization tokens to prevent shoulder surfing, DOM inspection leaks, and scraping exposure.
+                    </p>
+                    <div class="code-block p-4 rounded-2xl text-xs text-neutral-300 space-y-1 overflow-x-auto">
+                        <div class="text-neutral-500">// Sanitized Masked Master Input</div>
+                        <div>&lt;input type="password" placeholder="Enter master authorization passkey" /&gt;</div>
+                    </div>
+                    <div class="flex items-center gap-2 pt-2 text-xs font-mono text-neutral-400">
+                        <i data-lucide="check" class="w-4 h-4 text-cyan-400"></i>
+                        <span>Active on: <strong class="text-white">All App Authentication Modals</strong></span>
+                    </div>
+                </article>
+
+                <!-- Method 10 -->
+                <article class="method-card p-8 rounded-3xl glass-card space-y-4" data-category="client">
+                    <div class="flex items-center justify-between">
+                        <span class="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-xs font-semibold">METHOD 10</span>
+                        <span class="text-xs font-mono text-neutral-500">Navigation Engine</span>
+                    </div>
+                    <h2 class="text-2xl font-display font-bold text-white">Route-Aware Floating Navigation Dock</h2>
+                    <p class="text-sm text-neutral-400 leading-relaxed">
+                        Uses Next.js `usePathname()` to conditionally mount the floating consumer dock. Automatically suppresses the dock on the private Admin Command Center (`/admin`) to preserve unobstructed screen real estate, and restricts the `#contact` button strictly to the homepage (`/`) where the actual contact section lives.
+                    </p>
+                    <div class="code-block p-4 rounded-2xl text-xs text-neutral-300 space-y-1 overflow-x-auto">
+                        <div class="text-neutral-500">// Route-Aware Dock Suppression</div>
+                        <div>if (pathname?.startsWith('/admin')) return null;</div>
+                        <div>const isMainBio = pathname === '/';</div>
+                    </div>
+                    <div class="flex items-center gap-2 pt-2 text-xs font-mono text-neutral-400">
+                        <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>
+                        <span>Active on: <strong class="text-white">apps/bio-hub (Dock.tsx)</strong></span>
+                    </div>
+                </article>
+
+                <!-- Method 11 -->
+                <article class="method-card p-8 rounded-3xl glass-card space-y-4 lg:col-span-2" data-category="edge">
+                    <div class="flex items-center justify-between">
+                        <span class="px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-xs font-semibold">METHOD 11</span>
+                        <span class="text-xs font-mono text-neutral-500">DevOps & Tooling</span>
+                    </div>
+                    <h2 class="text-2xl font-display font-bold text-white">1-Command Multi-Repository Git Subtree Orchestration</h2>
+                    <p class="text-sm text-neutral-400 leading-relaxed">
+                        Automated multi-repository synchronization tool (`scripts/sync-repos.mjs`). A single command (`./push-all.sh --all`) updates the unified monorepo, documentation vault, and individual subtrees across 6 distinct GitHub repositories (`himanshu-bio-ui`, `seo978`, `crypto-visualizer`, `himanshu-bio-server`, `About-me`), ensuring continuous CI/CD alignment.
+                    </p>
+                    <div class="code-block p-4 rounded-2xl text-xs text-neutral-300 space-y-1 overflow-x-auto">
+                        <div class="text-neutral-500">// Multi-Repo Ecosystem Sync Execution</div>
+                        <div>./push-all.sh "feat: synchronized ecosystem architecture update"</div>
+                        <div class="text-amber-400">✓ Slices subtrees & pushes 6 standalone GitHub repositories in 1 command</div>
+                    </div>
+                    <div class="flex items-center gap-2 pt-2 text-xs font-mono text-neutral-400">
+                        <i data-lucide="check" class="w-4 h-4 text-amber-400"></i>
+                        <span>Active on: <strong class="text-white">Root Monorepo Tooling (push-all.sh)</strong></span>
+                    </div>
+                </article>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="mt-auto border-t border-white/10 bg-slate-950/80 backdrop-blur-xl py-8 px-6 text-center text-xs font-mono text-neutral-500">
+            <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>© 2026 Himanshu. Built with TypeScript, Fastify, Next.js & Three.js.</div>
+                <div class="flex items-center gap-4">
+                    <a href="index.html" class="hover:text-amber-400 transition-colors">Executive Showcase</a>
+                    <span>•</span>
+                    <a href="https://github.com/himanshulm9-debug" target="_blank" class="hover:text-amber-400 transition-colors">GitHub Profile</a>
+                    <span>•</span>
+                    <a href="https://himanshu-bio.vercel.app" target="_blank" class="hover:text-amber-400 transition-colors">Live Portfolio</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Script for Filter & Cursor & Three.js Animation -->
+    <script>
+        lucide.createIcons();
+
+        // Custom Cursor Logic
+        const dot = document.getElementById('cursor-dot');
+        const outline = document.getElementById('cursor-outline');
+
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+            dot.style.left = `${posX}px`;
+            dot.style.top = `${posY}px`;
+            outline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+        });
+
+        // Filter Logic
+        function filterMethods(category) {
+            const cards = document.querySelectorAll('.method-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-amber-500', 'text-black', 'font-bold');
+                btn.classList.add('bg-white/5', 'text-neutral-300');
+            });
+
+            event.target.classList.add('bg-amber-500', 'text-black', 'font-bold');
+            event.target.classList.remove('bg-white/5', 'text-neutral-300');
+
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Three.js Ambient Particle Grid
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        container.appendChild(renderer.domElement);
+
+        const geometry = new THREE.BufferGeometry();
+        const count = 700;
+        const positions = new Float32Array(count * 3);
+
+        for (let i = 0; i < count * 3; i += 3) {
+            positions[i] = (Math.random() - 0.5) * 20;
+            positions[i + 1] = (Math.random() - 0.5) * 20;
+            positions[i + 2] = (Math.random() - 0.5) * 20;
+        }
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const material = new THREE.PointsMaterial({
+            size: 0.04,
+            color: 0xf59e0b,
+            transparent: true,
+            opacity: 0.5
+        });
+
+        const particles = new THREE.Points(geometry, material);
+        scene.add(particles);
+        camera.position.z = 7;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            particles.rotation.y += 0.0008;
+            particles.rotation.x += 0.0004;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+
+</html>

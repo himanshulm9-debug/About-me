@@ -247,7 +247,7 @@ gh auth login
 If you prefer to manually manage this repository alone:
 
 ```bash
-cd "/home/hj/Desktop/bio ultimate/About-me"
+cd About-me
 git add .
 git commit -m "feat: update documentation"
 git push -u origin main

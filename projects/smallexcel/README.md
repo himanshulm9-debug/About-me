@@ -138,8 +138,8 @@ cd cpp/build
 
 ---
 
-## 📂 Source Location
-- **Executable**: `/home/hj/Desktop/smallexcel/SmallExcel`
-- **Desktop Entry**: `/home/hj/Desktop/smallexcel/smallexcel.desktop`
-- **Source Code**: `/home/hj/Desktop/smallexcel/cpp`
-- **Architecture Spec**: `/home/hj/Desktop/smallexcel/SMXL_FORMAT_RATIONALE.md`
+## 📂 Project Structure & Artifacts
+- **Executable**: `SmallExcel` (Standalone C++20 / Qt6 316 KB binary)
+- **Desktop Entry**: `smallexcel.desktop`
+- **Source Code**: `cpp/`
+- **Architecture Spec**: `SMXL_FORMAT_RATIONALE.md`

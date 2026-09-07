@@ -117,7 +117,7 @@ The unification engine manages dedicated storage keys for each diagnostic tool, 
 
 #### 💻 Algorithmic Implementation Breakdown
 
-##### 1. Device Fingerprint Generation ([`apps/seo978/src/utils/guestId.ts`](file:///home/hj/Desktop/bio%20ultimate/himanshu-bio-combined/apps/seo978/src/utils/guestId.ts))
+##### 1. Device Fingerprint Generation ([`apps/seo978/src/utils/guestId.ts`](https://github.com/himanshulm9-debug/himanshu-bio-combined/blob/main/apps/seo978/src/utils/guestId.ts))
 ```ts
 export function getOrCreateGuestId(): string {
   if (typeof window === 'undefined') return 'guest_default';
@@ -181,7 +181,7 @@ export function mergeGuestHistoryToUser(guestId: string, userUid: string): void 
 }
 ```
 
-##### 3. Backend Reconciliation Protocol ([`apps/backend/src/services/store.ts`](file:///home/hj/Desktop/bio%20ultimate/himanshu-bio-combined/apps/backend/src/services/store.ts))
+##### 3. Backend Reconciliation Protocol ([`apps/backend/src/store/userStore.ts`](https://github.com/himanshulm9-debug/himanshu-bio-combined/blob/main/apps/backend/src/store/userStore.ts))
 ```ts
 linkGuestToUser(guestId: string, userKey: string): void {
   const guestRecord = this.users.get(guestId);
@@ -279,7 +279,7 @@ This ensures every standalone deployment serves as a functional marketing funnel
 ### 04. Dynamic Web Audio API Engine & Smart Music Discovery
 
 #### 💡 Architectural Concept
-Third-party music widgets (Spotify, SoundCloud, YouTube iframes) add 5–12 MB of JavaScript bloat, create tracking cookies, and fail to work offline or in restricted environments. We engineered a **native Web Audio API harmonic sound generator and dynamic music discovery engine** into [`apps/bio-hub/src/components/MusicPlayer.tsx`](file:///home/hj/Desktop/bio%20ultimate/himanshu-bio-combined/apps/bio-hub/src/components/MusicPlayer.tsx):
+Third-party music widgets (Spotify, SoundCloud, YouTube iframes) add 5–12 MB of JavaScript bloat, create tracking cookies, and fail to work offline or in restricted environments. We engineered a **native Web Audio API harmonic sound generator and dynamic music discovery engine** into [`apps/bio-hub/src/components/MusicPlayer.tsx`](https://github.com/himanshulm9-debug/himanshu-bio-combined/blob/main/apps/bio-hub/src/components/MusicPlayer.tsx):
 
 ```mermaid
 graph LR
@@ -401,7 +401,7 @@ Storing user-uploaded audit PDFs and resumes on Render.com's local filesystem ri
 #### 💡 The Problem
 A floating navigation dock placed in a root Next.js layout (`layout.tsx`) renders on every single route. On the private Admin Command Center (`/admin`), a floating dock overlays user management tables and telemetry logs, and renders a "Contact" button that links to `#contact` — an anchor that only exists on the homepage.
 
-#### ⚡ The Solution ([`apps/bio-hub/src/components/Dock.tsx`](file:///home/hj/Desktop/bio%20ultimate/himanshu-bio-combined/apps/bio-hub/src/components/Dock.tsx)):
+#### ⚡ The Solution ([`apps/bio-hub/src/components/Dock.tsx`](https://github.com/himanshulm9-debug/himanshu-bio-combined/blob/main/apps/bio-hub/src/components/Dock.tsx)):
 1. **Route Detection via `usePathname()`**:
    ```ts
    const pathname = usePathname();
@@ -434,7 +434,7 @@ The ecosystem consists of six interrelated GitHub repositories:
 
 Manually synchronizing changes across all six repositories requires over 18 manual Git commands and introduces severe risk of merge conflicts and subtree drift.
 
-#### ⚡ The Automated Solution ([`scripts/sync-repos.mjs`](file:///home/hj/Desktop/bio%20ultimate/himanshu-bio-combined/scripts/sync-repos.mjs)):
+#### ⚡ The Automated Solution ([`scripts/sync-repos.mjs`](https://github.com/himanshulm9-debug/himanshu-bio-combined/blob/main/scripts/sync-repos.mjs)):
 A single terminal command:
 ```bash
 ./push-all.sh --all
